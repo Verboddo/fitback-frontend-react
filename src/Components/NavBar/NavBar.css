@@ -1,0 +1,38 @@
+nav {
+    background-color: black;
+    color: white;
+    display: flex;
+    padding: 0 32px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 150px;
+}
+
+.logo-container img {
+    width: 50px;
+    margin-right: 8px;
+}
+
+button {
+    border-style: none;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: gray;
+    padding: 15px;
+}
+
+nav a,
+nav a:visited,
+nav a:active {
+    color: white;
+}

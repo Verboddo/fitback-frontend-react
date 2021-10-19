@@ -1,16 +1,18 @@
 import {Link, useHistory} from "react-router-dom";
-import Button from "./Button";
+import Button from "../Button";
+import dumbell from "../../assets/dumbell1.png"
+import "./NavBar.css"
 
 function NavBar() {
 
     const history = useHistory()
 
     return (
-        <>
+        <nav>
             {/*Logo with app text that links to homepage*/}
             <Link to="/">
                 <span className="logo-container">
-                    <img src="" alt=""/>
+                    <img src={dumbell} alt="logo"/>
                     <h3>
                         Fit-Back
                     </h3>
@@ -74,11 +76,11 @@ function NavBar() {
                     history={history}
                     location="/userexercisepage"
                 >
-                    Profile
+                    Exercises
                 </Button>
             </div>
 
-        </>
+        </nav>
     )
 }
 
