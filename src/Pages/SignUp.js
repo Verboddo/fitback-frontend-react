@@ -1,4 +1,4 @@
-function Register() {
+function SignUp() {
     return(
         <>
             <div>Welkom op de registratie pagina</div>
@@ -6,4 +6,4 @@ function Register() {
     )
 }
 
-export default Register
+export default SignUp
