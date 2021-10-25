@@ -1,5 +1,5 @@
 import styles from "./SignUp.module.css"
-import register from "../../assets/register.jpg"
+import loginRegisterImage from "../../assets/login-register-image.jpg"
 import Button from "../../Components/Button";
 
 function SignUp() {
@@ -11,7 +11,7 @@ function SignUp() {
                 <span>
                     <img
                         className={styles["register-image"]}
-                        src={register}
+                        src={loginRegisterImage}
                         alt="register"/>
                 </span>
 

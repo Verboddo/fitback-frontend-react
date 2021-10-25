@@ -6,9 +6,12 @@ import Login from "./Pages/login/Login";
 import PersonalTrainerPage from "./Pages/PersonalTrainerPage";
 import UserPage from "./Pages/UserPage";
 import UserExercisePage from "./Pages/UserExercisePage";
-import {Route, Switch} from "react-router-dom";
+import {Redirect, Route, Switch} from "react-router-dom";
+import {useContext} from "react";
+import {AuthContext} from "./context/AuthContext";
 
 function App() {
+    const { isAuth } = useContext(AuthContext)
     return (
         <>
             <NavBar/>
@@ -26,7 +29,7 @@ function App() {
                 </Route>
 
                 <Route exact path="/userpage">
-                    <UserPage/>
+                    {isAuth ? <UserPage/> : <Redirect to="/"/>}
                 </Route>
 
                 <Route exact path="/userexercisepage">
