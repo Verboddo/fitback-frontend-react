@@ -3,10 +3,10 @@ form {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #faeab3;
     padding: 40px;
     max-width: 300px;
     border-radius: 4px;
+    min-height: 200px;
 }
 
 form input {
@@ -17,16 +17,24 @@ form input {
     min-height: 100vh; /* minimum height = screen height */
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
 }
 
 .register-button {
-    background-color: blue;
+    background-color: #00ADEF;
     width: 100%;
+    margin-top: 5px;
+    border-radius: 10px;
 }
 
-.register-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.register-image{
+    max-height: 200px;
+}
+
+input {
+    border-style: solid;
+    border-radius: 3px;
+    margin: 5px;
+    padding: 7px;
 }

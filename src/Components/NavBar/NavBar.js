@@ -28,7 +28,7 @@ function NavBar() {
                         history={history}
                         location="/login"
                     >
-                        Login
+                        Log in
                     </Button>
                 </div>
 

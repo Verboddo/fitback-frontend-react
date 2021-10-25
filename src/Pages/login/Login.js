@@ -1,33 +1,25 @@
-import styles from "./SignUp.module.css"
 import register from "../../assets/register.jpg"
 import Button from "../../Components/Button";
+import styles from "../SignUp/SignUp.module.css"
 
-function SignUp() {
+function Login() {
     return (
         <>
             <div className={styles["form-container"]}>
-                <h1>Signup</h1>
-
+                <h1>Log in</h1>
                 <span>
                     <img
                         className={styles["register-image"]}
                         src={register}
-                        alt="register"/>
+                        alt="login image"
+                    />
                 </span>
 
                 <form>
-                    <label htmlFor="signUp">
+                    <label htmlFor="login">
                         <input
                             type="text"
                             placeholder="username"
-                        />
-                        <input
-                            type="email"
-                            placeholder="email"
-                        />
-                        <input
-                            type="password"
-                            placeholder="wachtwoord"
                         />
                         <input
                             type="password"
@@ -37,7 +29,7 @@ function SignUp() {
                             className={styles["register-button"]}
                             buttonType="submit"
                         >
-                            Signup
+                            Log in
                         </Button>
                     </label>
                 </form>
@@ -46,4 +38,4 @@ function SignUp() {
     )
 }
 
-export default SignUp
+export default Login
