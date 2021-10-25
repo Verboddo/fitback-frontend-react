@@ -42,7 +42,7 @@ function AuthContextProvider({children}) {
                             email: result.data.email,
                             username: result.data.username,
                         },
-                        status: 'done'
+                        status: "done"
                     })
                 } catch (e) {
                     console.error(e)
@@ -61,8 +61,6 @@ function AuthContextProvider({children}) {
                 status: 'done'
             })
         }
-
-
     }, [])
 
     async function loggedIn(JWT) {
@@ -85,7 +83,8 @@ function AuthContextProvider({children}) {
                     id: result.data.id,
                     email: result.data.email,
                     username: result.data.username,
-                }
+                },
+                status: "done"
             })
         } catch (e) {
             console.error(e)
@@ -100,6 +99,7 @@ function AuthContextProvider({children}) {
             ...isAuth,
             isAuth: false,
             user: null,
+            status: "done"
         })
         console.log("Gebruiker is uitgelogd")
         history.push("/")

@@ -7,7 +7,7 @@ import {useContext} from "react";
 import {AuthContext} from "../../context/AuthContext";
 
 function NavBar() {
-    const { isAuth, LoggedOut } = useContext(AuthContext)
+    const {isAuth, LoggedOut} = useContext(AuthContext)
 
     const history = useHistory()
 
@@ -93,6 +93,7 @@ function NavBar() {
                     </Button>
                 </div>
 
+                {isAuth &&
                 <div>
                     <button
                         type="button"
@@ -101,6 +102,7 @@ function NavBar() {
                         Logout
                     </button>
                 </div>
+                }
             </nav>
 
             <span className={styles["banner-container"]}>
