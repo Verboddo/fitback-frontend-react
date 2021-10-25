@@ -1,6 +1,7 @@
 import {createContext, useEffect, useState} from "react";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
+import {useHistory} from "react-router-dom";
 
 // Creating context
 export const AuthContext = createContext({})
@@ -14,6 +15,8 @@ function AuthContextProvider({children}) {
         user: null,
         status: "pending",
     })
+
+    const history = useHistory()
 
     useEffect(() => {
 
@@ -87,12 +90,19 @@ function AuthContextProvider({children}) {
         } catch (e) {
             console.error(e)
         }
+        history.push("/userpage")
         console.log("Gebruiker is ingelogd")
     }
 
     function LoggedOut() {
-        toggleIsAuth(false)
+        localStorage.clear()
+        toggleIsAuth({
+            ...isAuth,
+            isAuth: false,
+            user: null,
+        })
         console.log("Gebruiker is uitgelogd")
+        history.push("/")
     }
 
 

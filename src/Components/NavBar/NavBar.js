@@ -3,8 +3,11 @@ import Button from "../Button";
 import dumbell from "../../assets/dumbell1.png"
 import styles from "./NavBar.module.css"
 import banner from "../../assets/foto2.jpg";
+import {useContext} from "react";
+import {AuthContext} from "../../context/AuthContext";
 
 function NavBar() {
+    const { isAuth, LoggedOut } = useContext(AuthContext)
 
     const history = useHistory()
 
@@ -22,6 +25,7 @@ function NavBar() {
                 </Link>
 
                 {/*Buttons that are available to the public*/}
+                {!isAuth &&
                 <div>
                     <Button
                         buttonType="button"
@@ -31,7 +35,9 @@ function NavBar() {
                         Log in
                     </Button>
                 </div>
+                }
 
+                {!isAuth &&
                 <div>
                     <Button
                         buttonType="button"
@@ -41,18 +47,10 @@ function NavBar() {
                         Signup
                     </Button>
                 </div>
-
-                <div>
-                    <Button
-                        buttonType="button"
-                        history={history}
-                        location="/contact"
-                    >
-                        Contact
-                    </Button>
-                </div>
+                }
 
                 {/*If user is logged in it links to userpage if personal trainer is logged in it links to personal trainer page*/}
+                {isAuth &&
                 <div>
                     <Button
                         buttonType="type"
@@ -70,8 +68,10 @@ function NavBar() {
                         Profile
                     </Button>
                 </div>
+                }
 
                 {/*Links to the exercise page if user or personal trainer is logged in*/}
+                {isAuth &&
                 <div>
                     <Button
                         buttonType="type"
@@ -80,6 +80,26 @@ function NavBar() {
                     >
                         Exercises
                     </Button>
+                </div>
+                }
+
+                <div>
+                    <Button
+                        buttonType="button"
+                        history={history}
+                        location="/contact"
+                    >
+                        Contact
+                    </Button>
+                </div>
+
+                <div>
+                    <button
+                        type="button"
+                        onClick={LoggedOut}
+                    >
+                        Logout
+                    </button>
                 </div>
             </nav>
 
