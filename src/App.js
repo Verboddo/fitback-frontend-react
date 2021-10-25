@@ -1,7 +1,7 @@
 import './App.css';
 import NavBar from "./Components/NavBar/NavBar";
-import Home from "./Pages/Home";
-import SignUp from "./Pages/SignUp";
+import Home from "./Pages/Home/Home";
+import SignUp from "./Pages/SignUp/SignUp";
 import Login from "./Pages/Login";
 import PersonalTrainerPage from "./Pages/PersonalTrainerPage";
 import UserPage from "./Pages/UserPage";

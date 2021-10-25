@@ -5,6 +5,7 @@ nav {
     padding: 0 32px;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .logo-container {
@@ -15,24 +16,30 @@ nav {
 }
 
 .logo-container img {
-    width: 50px;
+    width: 75px;
     margin-right: 8px;
 }
 
-button {
+Button {
     border-style: none;
     background-color: black;
     color: white;
     font-weight: bold;
+    padding: 15px;
 }
 
-button:hover {
+Button:hover {
     background-color: gray;
-    padding: 15px;
 }
 
 nav a,
 nav a:visited,
 nav a:active {
     color: white;
+}
+
+.banner-container {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
 }

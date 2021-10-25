@@ -1,7 +1,7 @@
 import {useHistory} from "react-router-dom";
 
 //Create button component
-function Button({ children, buttonType, location}) {
+function Button({ children, buttonType, location, className}) {
 
     // Import the useHistory
     const history = useHistory()
@@ -9,6 +9,7 @@ function Button({ children, buttonType, location}) {
     return(
         //Create the button
         <button
+            className={className}
             //Create a button type with adjustable value
             type={buttonType}
             //Create the on click with adjustable history location

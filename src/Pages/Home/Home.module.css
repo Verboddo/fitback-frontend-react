@@ -1,0 +1,25 @@
+.project-container {
+    display: flex;
+    margin: 20px;
+}
+
+.project-container img {
+    height: 400px;
+}
+
+.welcome {
+    display: flex;
+    margin: 20px;
+    padding: 5px;
+    border-style: solid;
+    border-radius: 20px;
+}
+
+.project-text {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+    padding: 5px;
+    border-style: solid;
+    border-radius: 20px;
+}
