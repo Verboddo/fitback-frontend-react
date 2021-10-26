@@ -41,6 +41,13 @@ function AuthContextProvider({children}) {
                             id: result.data.id,
                             email: result.data.email,
                             username: result.data.username,
+                            fullName: result.data.fullName,
+                            address: result.data.address,
+                            zipcode: result.data.zipcode,
+                            country: result.data.country,
+                            age: result.data.age,
+                            height: result.data.height,
+                            weight: result.data.weight,
                         },
                         status: "done"
                     })

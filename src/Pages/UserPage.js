@@ -12,14 +12,14 @@ function UserPage() {
         <>
             <section>
                 <p>Username: {user.username}</p>
-                <p>Name:</p>
+                <p>Name: {user.fullName}</p>
                 <p>E-mail: {user.email}</p>
-                <p>Address:</p>
-                <p>Zipcode:</p>
-                <p>Country:</p>
-                <p>Age:</p>
-                <p>Height:</p>
-                <p>Weight:</p>
+                <p>Address: {user.address}</p>
+                <p>Zipcode: {user.zipcode}</p>
+                <p>Country: {user.country}</p>
+                <p>Age: {user.age}</p>
+                <p>Height: {user.height}</p>
+                <p>Weight: {user.weight}</p>
             </section>
             <Button
                 buttonType="button"
