@@ -9,6 +9,7 @@ import UserExercisePage from "./Pages/UserExercisePage";
 import {Redirect, Route, Switch} from "react-router-dom";
 import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
+import UpdateInformationPage from "./Pages/UpdateInformationPage";
 
 function App() {
     const { isAuth } = useContext(AuthContext)
@@ -42,6 +43,10 @@ function App() {
 
                 <Route exact path="/contact">
                     <UserPage/>
+                </Route>
+
+                <Route exact path="/update-information">
+                    {isAuth ? <UpdateInformationPage/> : <Redirect to="/"/>}
                 </Route>
             </Switch>
         </>
