@@ -15,6 +15,7 @@ function AuthContextProvider({children}) {
         user: null,
         status: "pending",
     })
+    const [isAdmin, setIsAdmin] = useState(false)
 
     const history = useHistory()
 
@@ -27,13 +28,20 @@ function AuthContextProvider({children}) {
 
             async function getUserData() {
                 try {
-                    const result = await axios(`http://localhost:8081/api/users/${decodedToken.sub}`,
+                    const result = await axios(`http://localhost:8080/api/users/${decodedToken.sub}`,
                         {
                             headers: {
                                 "Content-Type": "application/json",
                                 Authorization: `Bearer ${token}`
                             }
                         })
+
+                    // get user role
+                    const userRole = (result.data.roles[0].name)
+                    if (userRole === "ROLE_ADMIN") {
+                        setIsAdmin(true)
+                    }
+                    console.log(userRole)
                     toggleIsAuth({
                         ...isAuth,
                         isAuth: true,
@@ -41,7 +49,8 @@ function AuthContextProvider({children}) {
                             id: result.data.id,
                             email: result.data.email,
                             username: result.data.username,
-                            fullName: result.data.fullName,
+                            firstName: result.data.firstName,
+                            lastName: result.data.lastName,
                             address: result.data.address,
                             zipcode: result.data.zipcode,
                             country: result.data.country,
@@ -55,7 +64,6 @@ function AuthContextProvider({children}) {
                     console.error(e)
                 }
             }
-
             if (token) {
                 getUserData()
             }
@@ -76,13 +84,14 @@ function AuthContextProvider({children}) {
         const decodedToken = jwt_decode(JWT)
 
         try {
-            const result = await axios(`http://localhost:8081/api/users/${decodedToken.sub}`,
+            const result = await axios(`http://localhost:8080/api/users/${decodedToken.sub}`,
                 {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${JWT}`
                     }
                 })
+
             toggleIsAuth({
                 ...isAuth,
                 isAuth: true,
@@ -93,6 +102,9 @@ function AuthContextProvider({children}) {
                 },
                 status: "done"
             })
+            if (result.data.roles[0].name === "ROLE_ADMIN") {
+                setIsAdmin(true)
+            }
         } catch (e) {
             console.error(e)
         }
@@ -108,6 +120,7 @@ function AuthContextProvider({children}) {
             user: null,
             status: "done"
         })
+        setIsAdmin(false)
         console.log("Gebruiker is uitgelogd")
         history.push("/")
     }
@@ -117,6 +130,7 @@ function AuthContextProvider({children}) {
         ...isAuth,
         loggedIn,
         LoggedOut,
+        isAdmin,
     }
 
     return (

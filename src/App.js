@@ -5,50 +5,54 @@ import SignUp from "./Pages/SignUp/SignUp";
 import Login from "./Pages/login/Login";
 import PersonalTrainerPage from "./Pages/PersonalTrainerPage";
 import UserPage from "./Pages/UserPage";
-import UserExercisePage from "./Pages/UserExercisePage";
+import UserExercisePage from "./Pages/userExercisePage/UserExercisePage";
 import {Redirect, Route, Switch} from "react-router-dom";
 import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
 import UpdateInformationPage from "./Pages/UpdateInformationPage";
+import ContactPage from "./Pages/ContactPage";
 
 function App() {
-    const { isAuth } = useContext(AuthContext)
+    const {isAuth, isAdmin} = useContext(AuthContext)
     return (
         <>
             <NavBar/>
-            <Switch>
-                <Route exact path="/">
-                    <Home/>
-                </Route>
+            <div className="page-container">
+                <Switch>
+                    <Route exact path="/">
+                        <Home/>
+                    </Route>
 
-                <Route exact path="/signup">
-                    <SignUp/>
-                </Route>
+                    <Route exact path="/signup">
+                        <SignUp/>
+                    </Route>
 
-                <Route exact path="/login">
-                    <Login/>
-                </Route>
+                    <Route exact path="/login">
+                        <Login/>
+                    </Route>
 
-                <Route exact path="/userpage">
-                    {isAuth ? <UserPage/> : <Redirect to="/"/>}
-                </Route>
+                    <Route exact path="/userpage">
+                        {isAuth ? <UserPage/> : <Redirect to="/"/>}
+                    </Route>
 
-                <Route exact path="/userexercisepage">
-                    <UserExercisePage/>
-                </Route>
+                    <Route exact path="/userexercisepage">
+                        {isAuth ? <UserExercisePage/> : <Redirect to="/"/>}
 
-                <Route exact path="/personaltrainerpage">
-                    <PersonalTrainerPage/>
-                </Route>
+                    </Route>
 
-                <Route exact path="/contact">
-                    <UserPage/>
-                </Route>
+                    <Route exact path="/personaltrainerpage">
+                        {isAuth && isAdmin ? <PersonalTrainerPage/> : <Redirect to="/"/>}
+                    </Route>
 
-                <Route exact path="/update-information">
-                    {isAuth ? <UpdateInformationPage/> : <Redirect to="/"/>}
-                </Route>
-            </Switch>
+                    <Route exact path="/contact">
+                        <ContactPage/>
+                    </Route>
+
+                    <Route exact path="/update-information">
+                        {isAuth ? <UpdateInformationPage/> : <Redirect to="/"/>}
+                    </Route>
+                </Switch>
+            </div>
         </>
     );
 }

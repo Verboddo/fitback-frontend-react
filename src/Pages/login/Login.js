@@ -13,7 +13,7 @@ function Login() {
 
     async function onFormSubmit(data) {
         try{
-            const result = await axios.post("http://localhost:8081/api/auth/signin", {
+            const result = await axios.post("http://localhost:8080/api/auth/signin", {
                 username: data.username,
                 password: data.password,
             })

@@ -12,7 +12,7 @@ function SignUp() {
 
     async function onFormSubmit(data) {
         try {
-            await axios.post("http://localhost:8081/api/auth/signup",{
+            await axios.post("http://localhost:8080/api/auth/signup",{
                 username: data.username,
                 email: data.email,
                 password: data.password,

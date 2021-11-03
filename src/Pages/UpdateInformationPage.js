@@ -15,8 +15,9 @@ function UpdateInformationPage() {
         const decodedToken = jwt_decode(token)
 
         try {
-            const result = await axios.post(`http://localhost:8081/api/users/update-information/${decodedToken.sub}`, {
-                fullName: data.fullName,
+            const result = await axios.post(`http://localhost:8080/api/user-profile`, {
+                firstName: data.firstName,
+                lastName: data.lastName,
                 address: data.address,
                 zipcode: data.zipcode,
                 country: data.country,
@@ -42,9 +43,15 @@ function UpdateInformationPage() {
             <label htmlFor="update-information">
                 <input
                     type="text"
-                    placeholder="full name"
-                    id="full-name"
-                    {...register("fullName")}
+                    placeholder="first name"
+                    id="first-name"
+                    {...register("firstName")}
+                />
+                <input
+                    type="text"
+                    placeholder="last name"
+                    id="last-name"
+                    {...register("lastName")}
                 />
                 <input
                     type="text"
