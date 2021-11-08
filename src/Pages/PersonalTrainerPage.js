@@ -3,6 +3,7 @@ import {getFiles} from "../services/FileUploadService";
 import axios from "axios";
 import {useForm} from "react-hook-form";
 import UserInformation from "../Components/UserInformation";
+import PlayVideo from "../Components/PlayVideo";
 
 function PersonalTrainerPage() {
 
@@ -13,7 +14,6 @@ function PersonalTrainerPage() {
 
     const [selectBoxUserChoice, setSelectBoxUserChoice] = useState([])
     const [selectedUser, setSelectedUser] = useState([])
-    const [fileInfos, setFileInfos] = useState([])
     const [currentUserData, setCurrentUserData] = useState({
         currentUserData: null,
     })
@@ -22,97 +22,87 @@ function PersonalTrainerPage() {
 
     const fileInfoMapped = fileInfoForDownload.map(({id, name}) => ({id, name}))
 
-    console.log(fileInfoForDownload)
-
     const token = localStorage.getItem("token")
 
     // get user on username and file data for file download
     useEffect(() => {
-        async function getUserData() {
-            toggleError(false)
-            toggleLoading(true)
-            if (token) {
-                try {
-                    const result = await axios(`http://localhost:8080/api/users/${selectedUser}`, {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${token}`
-                        }
-                    })
-                    setCurrentUserData({
-                        currentUserData: {
-                            username: result.data.username,
-                            firstName: result.data.userProfile?.firstName,
-                            lastName: result.data.userProfile?.lastName,
-                            email: result.data.email,
-                            address: result.data.userProfile?.address,
-                            zipcode: result.data.userProfile?.zipcode,
-                            country: result.data.userProfile?.country,
-                            age: result.data.userProfile?.age,
-                            height: result.data.userProfile?.height,
-                            weight: result.data.userProfile?.weight
-                        }
-                    })
-                    const getFileInfo = result.data.fileDB
-                    if (getFileInfo) {
-                        getFileInfo.map(fileDB => fileDB)
-                        setFileInfoForDownload(getFileInfo)
-                    }
-                } catch (e) {
-                    console.error(e)
-                    toggleError(true)
-                }
-                toggleLoading(false)
-            }
-        }
-        if (selectedUser) {
-            getUserData()
-        }
+        getUserData()
     }, [selectedUser])
 
+    async function getUserData() {
+        toggleError(false)
+        toggleLoading(true)
+        if (token) {
+            try {
+                const result = await axios(`http://localhost:8080/api/users/${selectedUser}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                setCurrentUserData({
+                    currentUserData: {
+                        username: result.data.username,
+                        firstName: result.data.userProfile?.firstName,
+                        lastName: result.data.userProfile?.lastName,
+                        email: result.data.email,
+                        address: result.data.userProfile?.address,
+                        zipcode: result.data.userProfile?.zipcode,
+                        country: result.data.userProfile?.country,
+                        age: result.data.userProfile?.age,
+                        height: result.data.userProfile?.height,
+                        weight: result.data.userProfile?.weight
+                    }
+                })
+                const getFileInfo = result.data.fileDB
+                if (getFileInfo) {
+                    getFileInfo.map(fileDB => fileDB)
+                    setFileInfoForDownload(getFileInfo)
+                }
+            } catch (e) {
+                console.error(e)
+                toggleError(true)
+            }
+            toggleLoading(false)
+        }
+    }
 
     // get all users
     useEffect(() => {
-            if (token) {
-                getAllUserData()
-            }
+        getAllUserData()
     }, [])
-
 
     async function getAllUserData() {
         toggleError(false)
         toggleLoading(true)
-        try {
-            const result = await axios(`http://localhost:8080/api/users`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            // mapping over all users and returning only the usernames
-            const allUsers = result.data.map(user => user.username)
-            // set all usernames to useState
-            setSelectBoxUserChoice(allUsers)
-        } catch (e) {
-            console.log(e)
-            toggleError(true)
+        if (token) {
+            try {
+                const result = await axios(`http://localhost:8080/api/users`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                // mapping over all users and returning only the usernames
+                const allUsers = result.data.map(user => user.username)
+                // set all usernames to useState
+                setSelectBoxUserChoice(allUsers)
+            } catch (e) {
+                console.log(e)
+                toggleError(true)
+            }
+            toggleLoading(false)
         }
-        toggleLoading(false)
     }
 
     function onFormSubmit(data) {
     }
 
-    useEffect(() => {
-        getFiles().then((response) => {
-            setFileInfos(response.data);
-        });
-    }, []);
 
     // get data to download file
     async function downloadFile() {
-        const result = currentFileInfo.split(" ")
-        await axios(`http://localhost:8080/api/file/${result[0]}`, {
+        const fileIdAndName = currentFileInfo.split(" ")
+        await axios(`http://localhost:8080/api/file/${fileIdAndName[0]}`, {
             responseType: 'arraybuffer',
             headers: {
                 "Content-Type": "application/json",
@@ -124,7 +114,7 @@ function PersonalTrainerPage() {
                 const link = document.createElement('a');
                 link.href = url;
                 // value moet naam van file worden
-                link.setAttribute('download', `${result[1]}`);
+                link.setAttribute('download', `${fileIdAndName[1]}`);
                 document.body.appendChild(link);
                 link.click();
             })
@@ -138,6 +128,7 @@ function PersonalTrainerPage() {
             <form onSubmit={handleSubmit(onFormSubmit)}>
                 <select
                     onChange={e => setSelectedUser(e.target.value)}>
+                    <option selected disabled>Kies een gebruiker</option>
                     {selectBoxUserChoice.map(user => {
                         return <option
                             key={user}
@@ -148,22 +139,6 @@ function PersonalTrainerPage() {
                     })}
                     ></select>
             </form>
-
-            {fileInfoForDownload.length > 0 &&
-            <form onSubmit={handleSubmit(onFormSubmit)}>
-                <select
-                    onChange={e => setCurrentFileInfo(e.target.value)}>
-                    {fileInfoMapped.map(fileId => {
-                        return <option
-                            key={fileId.id}
-                            value={fileId.id.name}
-                        >
-                            {fileId.id} {fileId.name}
-                        </option>
-                    })}
-                    ></select>
-            </form>
-            }
 
             {currentUserData.currentUserData &&
             <UserInformation
@@ -180,18 +155,29 @@ function PersonalTrainerPage() {
             />
             }
 
-            {fileInfos.length > 0 && (
-                <div className="card">
-                    <div className="card-header">List of Files</div>
-                    <ul className="list-group list-group-flush">
-                        {fileInfos.map((file, index) => (
-                            <li className="list-group-item" key={index}>
-                                <a href={file.url}>{file.name}</a>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+            {fileInfoForDownload.length > 0 &&
+            <form onSubmit={handleSubmit(onFormSubmit)}>
+                <select
+                    onChange={e => setCurrentFileInfo(e.target.value)}>
+                    <option selected disabled>Kies een video</option>
+                    {fileInfoMapped.map(fileId => {
+                        return <option
+                            key={fileId.id}
+                            value={fileId.id.name}
+                        >
+                            {fileId.id} {fileId.name}
+                        </option>
+                    })}
+                    ></select>
+            </form>
+            }
+
+            {currentFileInfo.length > 0 &&
+            <PlayVideo
+                key={currentFileInfo.split(" ")[0]}
+                fileId={currentFileInfo.split(" ")[0]}
+                />
+            }
 
             <button onClick={() => downloadFile()}>Download</button>
 

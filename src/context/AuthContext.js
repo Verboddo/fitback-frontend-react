@@ -20,7 +20,6 @@ function AuthContextProvider({children}) {
 
     const history = useHistory()
 
-
     useEffect(() => {
 
         const token = localStorage.getItem("token")

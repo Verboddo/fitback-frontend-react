@@ -42,7 +42,6 @@ function UpdateInformationPage() {
                     Authorization: `Bearer ${token}`
                 }
             })
-
             history.push("/userpage")
             console.log(result)
         } catch (e) {
