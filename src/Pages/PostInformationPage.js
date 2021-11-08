@@ -2,32 +2,17 @@ import {useForm} from "react-hook-form";
 import Button from "../Components/Button";
 import axios from "axios";
 import {useHistory} from "react-router-dom";
-import {useContext, useState} from "react";
-import {UserProfileContext} from "../context/UserProfileContext";
-import jwt_decode from "jwt-decode";
 
 function UpdateInformationPage() {
     const {register, handleSubmit} = useForm()
-    const {userProfile} = useContext(UserProfileContext)
-
-    const [firstName, setFirstName] = useState(userProfile.firstName)
-    const [lastName, setLastName] = useState(userProfile.lastName)
-    const [address, setAddress] = useState(userProfile.address)
-    const [zipcode, setZipcode] = useState(userProfile.zipcode)
-    const [country, setCountry] = useState(userProfile.country)
-    const [age, setAge] = useState(userProfile.age)
-    const [height, setHeight] = useState(userProfile.height)
-    const [weight, setWeight] = useState(userProfile.weight)
 
     const history = useHistory()
 
     async function onFormSubmit(data) {
         const token = localStorage.getItem("token")
 
-        const decodedToken = jwt_decode(token)
-
         try {
-            const result = await axios.put(`http://localhost:8080/api/user-profile/${decodedToken.sub}`, {
+            const result = await axios.post(`http://localhost:8080/api/user-profile`, {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 address: data.address,
@@ -62,8 +47,6 @@ function UpdateInformationPage() {
                         minLength: 3,
                         maxLength:25,
                     })}
-                    value={firstName}
-                    onChange={e => setFirstName(e.target.value)}
                 />
                 <input
                     type="text"
@@ -74,8 +57,6 @@ function UpdateInformationPage() {
                         minLength: 3,
                         maxLength: 25,
                         })}
-                    value={lastName}
-                    onChange={e => setLastName(e.target.value)}
                 />
                 <input
                     type="text"
@@ -86,8 +67,6 @@ function UpdateInformationPage() {
                         minLength: 5,
                         maxLength: 50,
                     })}
-                    value={address}
-                    onChange={e => setAddress(e.target.value)}
                 />
                 <input
                     type="text"
@@ -99,8 +78,6 @@ function UpdateInformationPage() {
                         minLength: 6,
                         maxLength: 6,
                     })}
-                    value={zipcode}
-                    onChange={e => setZipcode(e.target.value)}
                 />
                 <input
                     type="text"
@@ -111,8 +88,6 @@ function UpdateInformationPage() {
                         minLength: 3,
                         maxLength: 50,
                     })}
-                    value={country}
-                    onChange={e => setCountry(e.target.value)}
                 />
                 <input
                     type="number"
@@ -123,8 +98,6 @@ function UpdateInformationPage() {
                         min: 18,
                         max: 100,
                     })}
-                    value={age}
-                    onChange={e => setAge(e.target.value)}
                 />
                 <input
                     type="number"
@@ -135,8 +108,6 @@ function UpdateInformationPage() {
                         min: 100,
                         max: 220,
                     })}
-                    value={height}
-                    onChange={e => setHeight(e.target.value)}
                 />
                 <input
                     type="number"
@@ -147,8 +118,6 @@ function UpdateInformationPage() {
                         min: 40,
                         max: 190,
                     })}
-                    value={weight}
-                    onChange={e => setWeight(e.target.value)}
                 />
                 <Button
                     buttonType="submit"

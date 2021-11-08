@@ -5,12 +5,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import AuthContextProvider from "./context/AuthContext";
+import UserProfileContextProvider from "./context/UserProfileContext";
 
 ReactDOM.render(
     <React.StrictMode>
         <Router>
             <AuthContextProvider>
-                <App/>
+                <UserProfileContextProvider>
+                    <App/>
+                </UserProfileContextProvider>
             </AuthContextProvider>
         </Router>
     </React.StrictMode>,

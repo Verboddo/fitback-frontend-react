@@ -1,26 +1,33 @@
 import {useContext} from "react";
-import {AuthContext} from "../context/AuthContext";
 import Button from "../Components/Button";
 import {useHistory} from "react-router-dom";
+import {UserProfileContext} from "../context/UserProfileContext";
+import UserInformation from "../Components/UserInformation";
+import {AuthContext} from "../context/AuthContext";
 
 function UserPage() {
+    const {userProfile} = useContext(UserProfileContext)
     const { user } = useContext(AuthContext)
 
     const history = useHistory()
 
     return (
         <>
-            <section>
-                <p>Username: {user.username}</p>
-                <p>Name: {user.fullName}</p>
-                <p>E-mail: {user.email}</p>
-                <p>Address: {user.address}</p>
-                <p>Zipcode: {user.zipcode}</p>
-                <p>Country: {user.country}</p>
-                <p>Age: {user.age}</p>
-                <p>Height: {user.height}</p>
-                <p>Weight: {user.weight}</p>
-            </section>
+            {userProfile &&
+                <UserInformation
+                userName={user.username}
+                userFirstName={userProfile.firstName}
+                userLastName={userProfile.lastName}
+                userEmail={user.email}
+                userAddress={userProfile.address}
+                userZipcode={userProfile.zipcode}
+                userCountry={userProfile.country}
+                userAge={userProfile.age}
+                userHeight={userProfile.height}
+                userWeight={userProfile.weight}
+                />
+            }
+
             <Button
                 buttonType="button"
                 history={history}
@@ -28,6 +35,15 @@ function UserPage() {
             >
                 Update information
             </Button>
+
+            <Button
+                buttonType="button"
+                history={history}
+                location="/post-information"
+            >
+                Update information
+            </Button>
+
         </>
     )
 }

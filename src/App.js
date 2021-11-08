@@ -11,9 +11,13 @@ import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
 import UpdateInformationPage from "./Pages/UpdateInformationPage";
 import ContactPage from "./Pages/ContactPage";
+import PostInformationPage from "./Pages/PostInformationPage";
+import {UserProfileContext} from "./context/UserProfileContext";
 
 function App() {
-    const {isAuth, isAdmin} = useContext(AuthContext)
+    const { isAuth, isAdmin } = useContext(AuthContext)
+    const { userProfile } = useContext(UserProfileContext)
+
     return (
         <>
             <NavBar/>
@@ -50,6 +54,10 @@ function App() {
 
                     <Route exact path="/update-information">
                         {isAuth ? <UpdateInformationPage/> : <Redirect to="/"/>}
+                    </Route>
+
+                    <Route exact path={"/post-information"}>
+                        {isAuth ? <PostInformationPage/> : <Redirect to="/"/>}
                     </Route>
                 </Switch>
             </div>

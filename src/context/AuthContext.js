@@ -15,9 +15,11 @@ function AuthContextProvider({children}) {
         user: null,
         status: "pending",
     })
+
     const [isAdmin, setIsAdmin] = useState(false)
 
     const history = useHistory()
+
 
     useEffect(() => {
 
@@ -35,13 +37,12 @@ function AuthContextProvider({children}) {
                                 Authorization: `Bearer ${token}`
                             }
                         })
-
                     // get user role
                     const userRole = (result.data.roles[0].name)
+                    // if user had role admin setIsAdmin to true
                     if (userRole === "ROLE_ADMIN") {
                         setIsAdmin(true)
                     }
-                    console.log(userRole)
                     toggleIsAuth({
                         ...isAuth,
                         isAuth: true,
@@ -49,14 +50,6 @@ function AuthContextProvider({children}) {
                             id: result.data.id,
                             email: result.data.email,
                             username: result.data.username,
-                            firstName: result.data.firstName,
-                            lastName: result.data.lastName,
-                            address: result.data.address,
-                            zipcode: result.data.zipcode,
-                            country: result.data.country,
-                            age: result.data.age,
-                            height: result.data.height,
-                            weight: result.data.weight,
                         },
                         status: "done"
                     })
