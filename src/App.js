@@ -3,7 +3,7 @@ import NavBar from "./Components/NavBar/NavBar";
 import Home from "./Pages/Home/Home";
 import SignUp from "./Pages/SignUp/SignUp";
 import Login from "./Pages/login/Login";
-import PersonalTrainerPage from "./Pages/PersonalTrainerPage";
+import PersonalTrainerPage from "./Pages/PersonalTrainerPage/PersonalTrainerPage";
 import UserPage from "./Pages/UserPage";
 import UserExercisePage from "./Pages/userExercisePage/UserExercisePage";
 import {Redirect, Route, Switch} from "react-router-dom";

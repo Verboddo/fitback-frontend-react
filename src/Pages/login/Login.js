@@ -35,7 +35,9 @@ function Login() {
                     />
                 </span>
 
-                <form onSubmit={handleSubmit(onFormSubmit)}>
+                <form
+                    className={styles["signup-form"]}
+                    onSubmit={handleSubmit(onFormSubmit)}>
                     <label htmlFor="login">
                         <input
                             type="text"

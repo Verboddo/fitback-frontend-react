@@ -1,4 +1,4 @@
-form {
+.signup-form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,7 +9,7 @@ form {
     min-height: 200px;
 }
 
-form input {
+.signup-form input {
     width: 100%;
 }
 

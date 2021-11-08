@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
-import {getFiles} from "../services/FileUploadService";
 import axios from "axios";
 import {useForm} from "react-hook-form";
-import UserInformation from "../Components/UserInformation";
-import PlayVideo from "../Components/PlayVideo";
+import UserInformation from "../../Components/UserInformation";
+import PlayVideo from "../../Components/PlayVideo";
+import styles from "./PersonalTrainerPage.module.css"
 
 function PersonalTrainerPage() {
 
@@ -23,6 +23,9 @@ function PersonalTrainerPage() {
     const fileInfoMapped = fileInfoForDownload.map(({id, name}) => ({id, name}))
 
     const token = localStorage.getItem("token")
+
+    function onFormSubmit(data) {
+    }
 
     // get user on username and file data for file download
     useEffect(() => {
@@ -95,10 +98,6 @@ function PersonalTrainerPage() {
         }
     }
 
-    function onFormSubmit(data) {
-    }
-
-
     // get data to download file
     async function downloadFile() {
         const fileIdAndName = currentFileInfo.split(" ")
@@ -125,7 +124,10 @@ function PersonalTrainerPage() {
         <>
             {loading && <span>Loading...</span>}
             {error && <span>Er is iets misgegaan met het ophalen van de data</span>}
-            <form onSubmit={handleSubmit(onFormSubmit)}>
+            <form
+                onSubmit={handleSubmit(onFormSubmit)}
+                className={styles["user-select-box"]}
+            >
                 <select
                     onChange={e => setSelectedUser(e.target.value)}>
                     <option selected disabled>Kies een gebruiker</option>

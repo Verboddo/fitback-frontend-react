@@ -35,7 +35,9 @@ function SignUp() {
                         alt="register"/>
                 </span>
 
-                <form onSubmit={handleSubmit(onFormSubmit)}>
+                <form
+                    className={styles["signup-form"]}
+                    onSubmit={handleSubmit(onFormSubmit)}>
                     <label htmlFor="signUp">
                         <input
                             type="text"
