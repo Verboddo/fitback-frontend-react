@@ -12,7 +12,3 @@ export const uploadFile = (file, onUploadProgress) => {
         onUploadProgress,
     });
 };
-
-export const getFiles = () => {
-    return http.get("/files");
-};
