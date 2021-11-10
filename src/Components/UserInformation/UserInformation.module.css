@@ -1,0 +1,12 @@
+.user-information-container {
+    width: 450px;
+    margin: 10px 0 10px 0;
+}
+
+.user-information{
+    border-style: solid;
+    border-width: 2px;
+    border-color: #6D696A;
+    border-radius: 10px;
+    padding: 5px;
+}

@@ -1,9 +1,10 @@
 import {useContext} from "react";
-import Button from "../Components/Button";
+import Button from "../../Components/Button";
 import {useHistory} from "react-router-dom";
-import {UserProfileContext} from "../context/UserProfileContext";
-import UserInformation from "../Components/UserInformation";
-import {AuthContext} from "../context/AuthContext";
+import {UserProfileContext} from "../../context/UserProfileContext";
+import UserInformation from "../../Components/UserInformation/UserInformation";
+import {AuthContext} from "../../context/AuthContext";
+import styles from "./UserPage.module.css"
 
 function UserPage() {
     const {userProfile} = useContext(UserProfileContext)
@@ -29,6 +30,7 @@ function UserPage() {
             }
 
             <Button
+                className={styles["update-information-button"]}
                 buttonType="button"
                 history={history}
                 location="/update-information"
@@ -37,6 +39,7 @@ function UserPage() {
             </Button>
 
             <Button
+                className={styles["update-information-button"]}
                 buttonType="button"
                 history={history}
                 location="/post-information"

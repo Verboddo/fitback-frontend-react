@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {useForm} from "react-hook-form";
-import UserInformation from "../../Components/UserInformation";
+import UserInformation from "../../Components/UserInformation/UserInformation";
 import PlayVideo from "../../Components/PlayVideo";
 import styles from "./PersonalTrainerPage.module.css"
 
