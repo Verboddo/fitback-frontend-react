@@ -1,7 +1,31 @@
-.user-select-box {
-    width: 100px;
-    height: 10px;
-    margin: 40px;
-    padding: 40px;
-    background-color: black;
+.personal-trainer-select-box-container {
+    margin: 20px 20px 20px 0;
+    border: 3px solid #6D696A;
+    border-radius: 5px;
+    width: 200px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}
+
+.personal-trainer-select-box {
+    width: 200px;
+    height: 30px;
+    border: 0;
+}
+
+.personal-trainer-select-box-container:hover {
+    margin: 20px 20px 20px 0;
+    border: 3px solid;
+    border-radius: 5px;
+    width: 200px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}
+
+.personal-trainer-button {
+    background-color: #00ADEF;
+    margin: 10px 0 20px 0;
+    border-radius: 10px;
+    font-size: 12px;
+    width: 200px;
 }

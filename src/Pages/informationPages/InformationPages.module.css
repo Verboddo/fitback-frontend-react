@@ -1,0 +1,25 @@
+.information-page-container{
+    width: 300px;
+    margin: auto;
+    display: inline-block;
+    justify-content: center;
+    text-align: left;
+    padding-top: 20px;
+}
+
+.information-form input{
+    width: 250px;
+}
+
+.information-page-button {
+    background-color: #00ADEF;
+    margin: 20px 0 0 10px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.update-information-input {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 6px;
+}

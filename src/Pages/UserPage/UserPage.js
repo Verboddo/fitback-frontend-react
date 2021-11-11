@@ -1,21 +1,36 @@
 import {useContext} from "react";
-import Button from "../../Components/Button";
 import {useHistory} from "react-router-dom";
 import {UserProfileContext} from "../../context/UserProfileContext";
 import UserInformation from "../../Components/UserInformation/UserInformation";
 import {AuthContext} from "../../context/AuthContext";
 import styles from "./UserPage.module.css"
+import jwt_decode from "jwt-decode";
 
 function UserPage() {
-    const {userProfile} = useContext(UserProfileContext)
-    const { user } = useContext(AuthContext)
+    const {userProfile, loading} = useContext(UserProfileContext)
+    const {user} = useContext(AuthContext)
+    const token = localStorage.getItem("token")
+
+    const decodedToken = jwt_decode(token)
+    console.log(decodedToken)
+
+    console.log(user.id)
 
     const history = useHistory()
 
+    function handleClick() {
+        if (userProfile.firstName === undefined) {
+            history.push("/post-information")
+        } else {
+            history.push("/update-information")
+        }
+    }
+
     return (
         <>
+            {loading && <span>Loading...</span>}
             {userProfile &&
-                <UserInformation
+            <UserInformation
                 userName={user.username}
                 userFirstName={userProfile.firstName}
                 userLastName={userProfile.lastName}
@@ -26,27 +41,17 @@ function UserPage() {
                 userAge={userProfile.age}
                 userHeight={userProfile.height}
                 userWeight={userProfile.weight}
-                />
+            />
             }
 
-            <Button
+            {!loading &&
+            <button
                 className={styles["update-information-button"]}
-                buttonType="button"
-                history={history}
-                location="/update-information"
-            >
-                Update information
-            </Button>
-
-            <Button
-                className={styles["update-information-button"]}
-                buttonType="button"
-                history={history}
-                location="/post-information"
-            >
-                Update information
-            </Button>
-
+                type="button"
+                onClick={() => handleClick()}
+            >Update information
+            </button>
+            }
         </>
     )
 }

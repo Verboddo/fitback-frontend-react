@@ -4,9 +4,20 @@
 }
 
 .user-information{
+    display: table;
     border-style: solid;
     border-width: 2px;
     border-color: #6D696A;
     border-radius: 10px;
+    padding: 5px;
+}
+
+.table-row{
+    display: table-row;
+}
+
+.table-cell {
+    display: table-cell;
+    width: 100px;
     padding: 5px;
 }

@@ -17,15 +17,45 @@ function UserInformation({
         <>
             <div className={styles["user-information-container"]}>
                 <section className={styles["user-information"]}>
-                    <p>Username: {userName}</p>
-                    <p>Name: {userFirstName} {userLastName}</p>
-                    <p>E-mail: {userEmail}</p>
-                    <p>Address: {userAddress}</p>
-                    <p>Zipcode: {userZipcode}</p>
-                    <p>Country: {userCountry}</p>
-                    <p>Age: {userAge}</p>
-                    <p>Height: {userHeight}</p>
-                    <p>Weight: {userWeight}</p>
+                    <p className={styles["table-row"]}>
+                        <label className={styles["table-cell"]}>Username:</label>
+                        <label className={styles["table-cell"]}>{userName}</label>
+                    </p>
+                    <p className={styles["table-row"]}>
+                        <label className={styles["table-cell"]}>Name:</label>
+                        <label className={styles["table-cell"]}>{userFirstName} {userLastName}</label>
+                    </p>
+                    <p className={styles["table-row"]}>
+                        <label className={styles["table-cell"]}>E-mail:</label>
+                        <label className={styles["table-cell"]}>{userEmail}</label>
+                    </p>
+                    <p className={styles["table-row"]}>
+                        <label className={styles["table-cell"]}>Address</label>
+                        <label className={styles["table-cell"]}>{userAddress}</label>
+                    </p>
+                    <p className={styles["table-row"]}>
+                        <label className={styles["table-cell"]}>Zipcode:</label>
+                        <label className={styles["table-cell"]}>{userZipcode}</label>
+
+                    </p>
+                    <p className={styles["table-row"]}>
+                        <label className={styles["table-cell"]}>Country:</label>
+                        <label className={styles["table-cell"]}>{userCountry}</label>
+
+                    </p>
+                    <p className={styles["table-row"]}>
+                        <label className={styles["table-cell"]}>Age:</label>
+                        <label className={styles["table-cell"]}>{userAge}</label>
+                    </p>
+                    <p className={styles["table-row"]}>
+                        <label className={styles["table-cell"]}>Height:</label>
+                        <label className={styles["table-cell"]}>{userHeight}</label>
+
+                    </p>
+                    <p className={styles["table-row"]}>
+                        <label className={styles["table-cell"]}>Weight:</label>
+                        <label className={styles["table-cell"]}>{userWeight}</label>
+                    </p>
                 </section>
             </div>
         </>

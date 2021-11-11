@@ -124,11 +124,14 @@ function PersonalTrainerPage() {
         <>
             {loading && <span>Loading...</span>}
             {error && <span>Er is iets misgegaan met het ophalen van de data</span>}
+
+            {currentUserData.currentUserData &&
             <form
+                className={styles["personal-trainer-select-box-container"]}
                 onSubmit={handleSubmit(onFormSubmit)}
-                className={styles["user-select-box"]}
             >
                 <select
+                    className={styles["personal-trainer-select-box"]}
                     onChange={e => setSelectedUser(e.target.value)}>
                     <option selected disabled>Kies een gebruiker</option>
                     {selectBoxUserChoice.map(user => {
@@ -141,6 +144,7 @@ function PersonalTrainerPage() {
                     })}
                     ></select>
             </form>
+            }
 
             {currentUserData.currentUserData &&
             <UserInformation
@@ -158,8 +162,11 @@ function PersonalTrainerPage() {
             }
 
             {fileInfoForDownload.length > 0 &&
-            <form onSubmit={handleSubmit(onFormSubmit)}>
+            <form
+                className={styles["personal-trainer-select-box-container"]}
+                onSubmit={handleSubmit(onFormSubmit)}>
                 <select
+                    className={styles["personal-trainer-select-box"]}
                     onChange={e => setCurrentFileInfo(e.target.value)}>
                     <option selected disabled>Kies een video</option>
                     {fileInfoMapped.map(fileId => {
@@ -181,8 +188,14 @@ function PersonalTrainerPage() {
                 />
             }
 
-            <button onClick={() => downloadFile()}>Download</button>
-
+            {currentFileInfo.length > 0 &&
+            <p>Indien de video niet laadt kunt u de video downloaden door middel van het download knop hieronder</p>
+            }
+            {currentFileInfo.length > 0 &&
+            <button
+                className={styles["personal-trainer-button"]}
+                onClick={() => downloadFile()}>Download</button>
+            }
         </>
     )
 }

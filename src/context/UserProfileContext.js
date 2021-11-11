@@ -9,8 +9,10 @@ function UserProfileContextProvider({children}) {
     const [userProfileData, setUserProfileData] = useState({
         userProfile: null,
     })
+    const [loading, toggleLoading] = useState(false);
 
     useEffect(() => {
+        toggleLoading(true)
         const token = localStorage.getItem("token")
 
         if (token) {
@@ -41,6 +43,7 @@ function UserProfileContextProvider({children}) {
                         userProfileData: null,
                     })
                 }
+                toggleLoading(false)
             }
             if(token) {
                 getUserData()
@@ -50,6 +53,7 @@ function UserProfileContextProvider({children}) {
 
     const contextData = {
         ...userProfileData,
+        loading,
     }
 
     return (

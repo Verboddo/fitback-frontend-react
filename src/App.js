@@ -9,9 +9,9 @@ import UserExercisePage from "./Pages/userExercisePage/UserExercisePage";
 import {Redirect, Route, Switch} from "react-router-dom";
 import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
-import UpdateInformationPage from "./Pages/UpdateInformationPage";
+import UpdateInformationPage from "./Pages/informationPages/UpdateInformationPage";
 import ContactPage from "./Pages/ContactPage";
-import PostInformationPage from "./Pages/PostInformationPage";
+import PostInformationPage from "./Pages/informationPages/PostInformationPage";
 import {UserProfileContext} from "./context/UserProfileContext";
 
 function App() {
