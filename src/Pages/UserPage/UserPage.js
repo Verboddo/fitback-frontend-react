@@ -4,17 +4,11 @@ import {UserProfileContext} from "../../context/UserProfileContext";
 import UserInformation from "../../Components/UserInformation/UserInformation";
 import {AuthContext} from "../../context/AuthContext";
 import styles from "./UserPage.module.css"
-import jwt_decode from "jwt-decode";
 
 function UserPage() {
     const {userProfile, loading} = useContext(UserProfileContext)
     const {user} = useContext(AuthContext)
     const token = localStorage.getItem("token")
-
-    const decodedToken = jwt_decode(token)
-    console.log(decodedToken)
-
-    console.log(user.id)
 
     const history = useHistory()
 

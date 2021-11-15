@@ -1,10 +1,12 @@
-import {createContext, useEffect, useState} from "react";
-import jwt_decode from "jwt-decode";
+import {createContext, useContext, useEffect, useState} from "react";
 import axios from "axios";
+import {AuthContext} from "./AuthContext";
 
 export const UserProfileContext = createContext({})
 
 function UserProfileContextProvider({children}) {
+
+    const {user} = useContext(AuthContext)
 
     const [userProfileData, setUserProfileData] = useState({
         userProfile: null,
@@ -14,13 +16,11 @@ function UserProfileContextProvider({children}) {
     useEffect(() => {
         toggleLoading(true)
         const token = localStorage.getItem("token")
-
         if (token) {
-            const decodedToken = jwt_decode(token)
 
             async function getUserData() {
                 try {
-                    const result = await axios(`http://localhost:8080/api/users/${decodedToken.sub}`, {
+                    const result = await axios(`http://localhost:8080/api/users/${user.id}/userprofile`, {
                         headers: {
                             "Content-Type": "application/json",
                             Authorization: `Bearer ${token}`
@@ -28,14 +28,14 @@ function UserProfileContextProvider({children}) {
                     })
                     setUserProfileData({
                         userProfile: {
-                            firstName: result.data.userProfile?.firstName,
-                            lastName: result.data.userProfile?.lastName,
-                            address: result.data.userProfile?.address,
-                            zipcode: result.data.userProfile?.zipcode,
-                            country: result.data.userProfile?.country,
-                            age: result.data.userProfile?.age,
-                            height: result.data.userProfile?.height,
-                            weight: result.data.userProfile?.weight
+                            firstName: result.data?.firstName,
+                            lastName: result.data?.lastName,
+                            address: result.data?.address,
+                            zipcode: result.data?.zipcode,
+                            country: result.data?.country,
+                            age: result.data?.age,
+                            height: result.data?.height,
+                            weight: result.data?.weight
                         }
                     })
                 } catch (e) {

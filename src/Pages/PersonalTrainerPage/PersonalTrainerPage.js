@@ -12,15 +12,22 @@ function PersonalTrainerPage() {
     const [error, toggleError] = useState(false);
     const [loading, toggleLoading] = useState(false);
 
+    // put all users in select box so personal trainer can choose user
     const [selectBoxUserChoice, setSelectBoxUserChoice] = useState([])
+    // put the selected username in useState so we can load user information
     const [selectedUser, setSelectedUser] = useState([])
+    // put user information in state so we can load in page
     const [currentUserData, setCurrentUserData] = useState({
         currentUserData: null,
     })
-    const [currentFileInfo, setCurrentFileInfo] = useState([])
+    // all the file info inside useState to use to download file
     const [fileInfoForDownload, setFileInfoForDownload] = useState([])
 
-    const fileInfoMapped = fileInfoForDownload.map(({id, name}) => ({id, name}))
+    // mapping over the file info to get the right data to make the personal trainer select video data
+    const fileInfoMapped = fileInfoForDownload.map(({id, name, username}) => ({id, name, username}))
+
+    // chosen file by personal trainer to display video or download video
+    const [currentFileInfo, setCurrentFileInfo] = useState([])
 
     const token = localStorage.getItem("token")
 
@@ -57,11 +64,6 @@ function PersonalTrainerPage() {
                         weight: result.data.userProfile?.weight
                     }
                 })
-                const getFileInfo = result.data.fileDB
-                if (getFileInfo) {
-                    getFileInfo.map(fileDB => fileDB)
-                    setFileInfoForDownload(getFileInfo)
-                }
             } catch (e) {
                 console.error(e)
                 toggleError(true)
@@ -95,6 +97,24 @@ function PersonalTrainerPage() {
                 toggleError(true)
             }
             toggleLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        getFiledata()
+    }, [])
+
+    async function getFiledata() {
+        try {
+            const result = await axios("http://localhost:8080/api/file/files", {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setFileInfoForDownload(result.data)
+        } catch (e) {
+            console.error(e)
         }
     }
 
@@ -174,7 +194,7 @@ function PersonalTrainerPage() {
                             key={fileId.id}
                             value={fileId.id.name}
                         >
-                            {fileId.id} {fileId.name}
+                            {fileId.id} {fileId.name} {fileId.username}
                         </option>
                     })}
                     ></select>
