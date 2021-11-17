@@ -6,18 +6,19 @@ export const UserProfileContext = createContext({})
 
 function UserProfileContextProvider({children}) {
 
-    const {user} = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
 
     const [userProfileData, setUserProfileData] = useState({
         userProfile: null,
     })
     const [loading, toggleLoading] = useState(false);
+    const [changeData, setChangeData] = useState(false)
 
     useEffect(() => {
         toggleLoading(true)
+        setChangeData(false)
         const token = localStorage.getItem("token")
         if (token) {
-
             async function getUserData() {
                 try {
                     const result = await axios(`http://localhost:8080/api/users/${user.id}/userprofile`, {
@@ -49,11 +50,12 @@ function UserProfileContextProvider({children}) {
                 getUserData()
             }
         }
-    }, [])
+    }, [user, changeData])
 
     const contextData = {
         ...userProfileData,
         loading,
+        setChangeData,
     }
 
     return (

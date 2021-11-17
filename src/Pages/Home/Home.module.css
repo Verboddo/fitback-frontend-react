@@ -1,6 +1,6 @@
 .project-container {
     display: flex;
-    margin: 20px;
+    margin: 20px 0;
 }
 
 .project-container img {
@@ -9,7 +9,7 @@
 
 .welcome {
     display: flex;
-    margin: 20px;
+    margin-top: 20px;
     padding: 5px;
     border-style: solid;
     border-radius: 20px;
@@ -18,7 +18,7 @@
 .project-text {
     display: flex;
     align-items: center;
-    margin: 20px;
+    margin-left: 20px;
     padding: 5px;
     border-style: solid;
     border-radius: 20px;

@@ -4,3 +4,7 @@
     margin: auto;
     width: 1024px;
 }
+
+.error {
+    color: #FF101F;
+}

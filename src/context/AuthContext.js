@@ -1,4 +1,4 @@
-import {createContext, useEffect, useState} from "react";
+import {createContext, useContext, useEffect, useState} from "react";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import {useHistory} from "react-router-dom";
@@ -72,7 +72,6 @@ function AuthContextProvider({children}) {
 
     async function loggedIn(JWT) {
         localStorage.setItem("token", JWT)
-
         const decodedToken = jwt_decode(JWT)
 
         try {

@@ -6,15 +6,14 @@ import styles from "./InformationPages.module.css"
 import UpdateInformation from "../../Components/UpdateInformation/UpdateInformation";
 
 function UpdateInformationPage() {
-    const { register, handleSubmit, formState: {errors, isDirty, isValid} } = useForm({mode: 'onBlur'})
+    const { register, handleSubmit, formState: {errors, isDirty, isValid} } = useForm({mode: 'onChange'})
 
     const history = useHistory()
 
     async function onFormSubmit(data) {
         const token = localStorage.getItem("token")
-
         try {
-            const result = await axios.post(`http://localhost:8080/api/user-profile`, {
+            await axios.post(`http://localhost:8080/api/user-profile`, {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 address: data.address,
@@ -29,9 +28,7 @@ function UpdateInformationPage() {
                     Authorization: `Bearer ${token}`
                 }
             })
-
             history.push("/userpage")
-            console.log(result)
         } catch (e) {
             console.error(e)
         }
@@ -52,6 +49,7 @@ function UpdateInformationPage() {
                         register={register}
                         registerName="firstName"
                         errors={errors}
+                        required={true}
                         pattern={/^[a-zA-Z]*$/}
                         patternMessage="Name may only exist out of letters"
                         minLengthMessage="Name is to short"
@@ -69,6 +67,7 @@ function UpdateInformationPage() {
                         registerName="lastName"
                         minLengthMessage="Name is too short"
                         errors={errors}
+                        required={true}
                         pattern={/^[a-zA-Z]*$/}
                         patternMessage="Name may only exist out of letters"
                         minLength={3}
@@ -83,6 +82,7 @@ function UpdateInformationPage() {
                         id="address"
                         register={register}
                         errors={errors}
+                        required={true}
                         registerName="address"
                         minLength={5}
                         minLengthMessage="Address name is too short"
@@ -98,13 +98,14 @@ function UpdateInformationPage() {
                         id="zipcode"
                         register={register}
                         errors={errors}
+                        required={true}
                         registerName="zipcode"
                         minLength={6}
                         minLengthMessage="Zipcode is too short"
                         maxLength={6}
                         maxLengthMessage="Zipcode is too long"
                         pattern={/[0-9]{4}[a-zA-Z]{2}/}
-                        patternMessage="Zipcode may only exist out of 4 letters and 2 numbers">
+                        patternMessage="Zipcode may only exist out of 4 numbers and 2 letters">
                         Zipcode:
                     </UpdateInformation>
                     <UpdateInformation
@@ -115,6 +116,7 @@ function UpdateInformationPage() {
                         id="country"
                         register={register}
                         errors={errors}
+                        required={true}
                         registerName="country"
                         pattern={/^[a-zA-Z]*$/}
                         patternMessage="Country name may only exist out of letters"
@@ -132,6 +134,7 @@ function UpdateInformationPage() {
                         id="age"
                         register={register}
                         errors={errors}
+                        required={true}
                         registerName="age"
                         min={12}
                         minMessage="Number is too low"
@@ -149,6 +152,7 @@ function UpdateInformationPage() {
                         id="height"
                         register={register}
                         errors={errors}
+                        required={true}
                         registerName="height"
                         min={100}
                         minMessage="Number is too low"
@@ -166,6 +170,7 @@ function UpdateInformationPage() {
                         id="weight"
                         register={register}
                         errors={errors}
+                        required={true}
                         registerName="weight"
                         min={40}
                         minMessage="Number is too low"

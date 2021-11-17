@@ -34,7 +34,7 @@ function PlayVideo( { fileId }) {
     return (
         <>
             {urlLink !== null &&
-            <ReactPlayer url={urlLink} width="800px" height="400px" controls={true}/>
+            <ReactPlayer url={urlLink} width="695px" height="400px" controls={true}/>
             }
         </>
     )

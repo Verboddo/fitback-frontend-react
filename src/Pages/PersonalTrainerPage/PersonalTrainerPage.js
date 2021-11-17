@@ -4,10 +4,11 @@ import {useForm} from "react-hook-form";
 import UserInformation from "../../Components/UserInformation/UserInformation";
 import PlayVideo from "../../Components/PlayVideo";
 import styles from "./PersonalTrainerPage.module.css"
+import Button from "../../Components/Button";
 
 function PersonalTrainerPage() {
 
-    const {handleSubmit} = useForm()
+    const {handleSubmit, register} = useForm()
 
     const [error, toggleError] = useState(false);
     const [loading, toggleLoading] = useState(false);
@@ -28,6 +29,11 @@ function PersonalTrainerPage() {
 
     // chosen file by personal trainer to display video or download video
     const [currentFileInfo, setCurrentFileInfo] = useState([])
+
+    const [feedbackId, setFeedbackId] = useState("")
+
+    const [feedbackText, setFeedbackText] = useState("")
+    const [submitSuccess, setSubmitSucces] = useState("")
 
     const token = localStorage.getItem("token")
 
@@ -101,10 +107,10 @@ function PersonalTrainerPage() {
     }
 
     useEffect(() => {
-        getFiledata()
+        getFileData()
     }, [])
 
-    async function getFiledata() {
+    async function getFileData() {
         try {
             const result = await axios("http://localhost:8080/api/file/files", {
                 headers: {
@@ -140,47 +146,122 @@ function PersonalTrainerPage() {
             .catch((error) => console.log(error));
     }
 
+    useEffect(() => {
+        setFeedbackText("")
+        setSubmitSucces("")
+
+        async function getFeedbackData() {
+            try {
+                const fileIdAndName = currentFileInfo.split(" ")
+                const result = await axios(`http://localhost:8080/api/file/${fileIdAndName[0]}/feedback`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                if (fileIdAndName) {
+                    setFeedbackText(result.data[0].feedback)
+                }
+                if (currentFileInfo) {
+                    setFeedbackId(result.data[0].id)
+                }
+            } catch (e) {
+                console.error(e)
+            }
+        }
+
+        getFeedbackData()
+    }, [currentFileInfo])
+
+    async function onFeedbackSubmit(data) {
+        const fileIdAndName = currentFileInfo.split(" ")
+        try {
+            const result = await axios.post("http://localhost:8080/api/feedback", {
+                feedback: data.feedback,
+                fileDB: {id: fileIdAndName[0]}
+            }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            if (result.status === 201) {
+                setFeedbackText("")
+                setSubmitSucces("Feedback uploaded successfully!")
+            }
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    async function onFeedbackUpdateSubmit(data) {
+        try {
+            const result = await axios.put(`http://localhost:8080/api/feedback/${feedbackId}`, {
+                    feedback: data.feedback
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+            if (result.status === 200) {
+                console.log("gelukt")
+                setFeedbackText("")
+                setSubmitSucces("Feedback updated successfully!")
+            }
+            console.log(result.status)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    console.log(feedbackText)
+
     return (
-        <>
+        <div className={styles["personal-trainer-page-container"]}>
             {loading && <span>Loading...</span>}
             {error && <span>Er is iets misgegaan met het ophalen van de data</span>}
 
-            {currentUserData.currentUserData &&
-            <form
-                className={styles["personal-trainer-select-box-container"]}
-                onSubmit={handleSubmit(onFormSubmit)}
-            >
-                <select
-                    className={styles["personal-trainer-select-box"]}
-                    onChange={e => setSelectedUser(e.target.value)}>
-                    <option selected disabled>Kies een gebruiker</option>
-                    {selectBoxUserChoice.map(user => {
-                        return <option
-                            key={user}
-                            value={user}
-                        >
-                            {user}
-                        </option>
-                    })}
-                    ></select>
-            </form>
-            }
+            <div>
+                {currentUserData.currentUserData &&
+                <form
+                    className={styles["personal-trainer-select-box-container"]}
+                    onSubmit={handleSubmit(onFormSubmit)}
+                >
+                    <select
+                        className={styles["personal-trainer-select-box"]}
+                        onChange={e => setSelectedUser(e.target.value)}>
+                        <option selected disabled>Kies een gebruiker</option>
+                        {selectBoxUserChoice.map(user => {
+                            return <option
+                                key={user}
+                                value={user}
+                            >
+                                {user}
+                            </option>
+                        })}
+                        ></select>
+                </form>
+                }
 
-            {currentUserData.currentUserData &&
-            <UserInformation
-                userName={currentUserData.currentUserData.username}
-                userFirstName={currentUserData.currentUserData.firstName}
-                userLastName={currentUserData.currentUserData.lastName}
-                userEmail={currentUserData.currentUserData.email}
-                userAddress={currentUserData.currentUserData.address}
-                userZipcode={currentUserData.currentUserData.zipcode}
-                userCountry={currentUserData.currentUserData.country}
-                userAge={currentUserData.currentUserData.age}
-                userHeight={currentUserData.currentUserData.height}
-                userWeight={currentUserData.currentUserData.weight}
-            />
-            }
+                {currentUserData.currentUserData &&
+                <UserInformation
+                    userName={currentUserData.currentUserData.username}
+                    userFirstName={currentUserData.currentUserData.firstName}
+                    userLastName={currentUserData.currentUserData.lastName}
+                    userEmail={currentUserData.currentUserData.email}
+                    userAddress={currentUserData.currentUserData.address}
+                    userZipcode={currentUserData.currentUserData.zipcode}
+                    userCountry={currentUserData.currentUserData.country}
+                    userAge={currentUserData.currentUserData.age}
+                    userHeight={currentUserData.currentUserData.height}
+                    userWeight={currentUserData.currentUserData.weight}
+                />
+                }
+            </div>
 
+            <div className={styles["personal-trainer-video-container"]}>
             {fileInfoForDownload.length > 0 &&
             <form
                 className={styles["personal-trainer-select-box-container"]}
@@ -205,7 +286,7 @@ function PersonalTrainerPage() {
             <PlayVideo
                 key={currentFileInfo.split(" ")[0]}
                 fileId={currentFileInfo.split(" ")[0]}
-                />
+            />
             }
 
             {currentFileInfo.length > 0 &&
@@ -216,7 +297,73 @@ function PersonalTrainerPage() {
                 className={styles["personal-trainer-button"]}
                 onClick={() => downloadFile()}>Download</button>
             }
-        </>
+            </div>
+
+            {feedbackText && currentFileInfo.length > 0 &&
+            <section className={styles["feedback-text"]}>
+                <h2>Given feedback on video:</h2>
+                <p>{feedbackText}</p>
+            </section>
+            }
+
+            {!feedbackText && currentFileInfo.length > 0 &&
+            <div className={styles["feedback-container"]}>
+                <form onSubmit={handleSubmit(onFeedbackSubmit)}>
+                    <p>Please give your feedback:</p>
+                    <label htmlFor="feedback">
+                        <textarea
+                            name="feedback"
+                            id=""
+                            cols="105"
+                            rows="13"
+                            placeholder="Type your feedback here"
+                            {...register("feedback", {
+                                    minLength: 10,
+                                    maxLength: 1024,
+                                }
+                            )}
+                        />
+                        <p>{submitSuccess}</p>
+                        <Button
+                            buttonType="submit"
+                        >
+                            Upload feedback
+                        </Button>
+                    </label>
+                </form>
+            </div>
+            }
+
+            {feedbackText && currentFileInfo.length > 0 &&
+            <div className={styles["feedback-container"]}>
+                <form onSubmit={handleSubmit(onFeedbackUpdateSubmit)}>
+                    <p>Please give your feedback:</p>
+                    <label htmlFor="feedback">
+                        <textarea
+                            name="feedback"
+                            id=""
+                            cols="105"
+                            rows="13"
+                            placeholder="Type your feedback here"
+                            onChange={event => setFeedbackText(event.target.value)}
+                            {...register("feedback", {
+                                minLength: 10,
+                                maxLength: 300,
+                            })}
+                            defaultValue={feedbackText}
+                        />
+                        <p>{submitSuccess}</p>
+                        <Button
+                            className={styles["personal-trainer-button"]}
+                            buttonType="submit"
+                        >
+                            Update feedback
+                        </Button>
+                    </label>
+                </form>
+            </div>
+            }
+        </div>
     )
 }
 

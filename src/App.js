@@ -5,18 +5,15 @@ import SignUp from "./Pages/SignUp/SignUp";
 import Login from "./Pages/login/Login";
 import PersonalTrainerPage from "./Pages/PersonalTrainerPage/PersonalTrainerPage";
 import UserPage from "./Pages/UserPage/UserPage";
-import UserExercisePage from "./Pages/userExercisePage/UserExercisePage";
+import VideoUploadPage from "./Pages/videoUploadPage/VideoUploadPage";
 import {Redirect, Route, Switch} from "react-router-dom";
 import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
 import UpdateInformationPage from "./Pages/informationPages/UpdateInformationPage";
-import ContactPage from "./Pages/ContactPage";
 import PostInformationPage from "./Pages/informationPages/PostInformationPage";
-import {UserProfileContext} from "./context/UserProfileContext";
 
 function App() {
     const { isAuth, isAdmin } = useContext(AuthContext)
-    const { userProfile } = useContext(UserProfileContext)
 
     return (
         <>
@@ -39,17 +36,13 @@ function App() {
                         {isAuth ? <UserPage/> : <Redirect to="/"/>}
                     </Route>
 
-                    <Route exact path="/userexercisepage">
-                        {isAuth ? <UserExercisePage/> : <Redirect to="/"/>}
+                    <Route exact path="/video-upload">
+                        {isAuth ? <VideoUploadPage/> : <Redirect to="/"/>}
 
                     </Route>
 
                     <Route exact path="/personaltrainerpage">
                         {isAuth && isAdmin ? <PersonalTrainerPage/> : <Redirect to="/"/>}
-                    </Route>
-
-                    <Route exact path="/contact">
-                        <ContactPage/>
                     </Route>
 
                     <Route exact path="/update-information">
@@ -59,6 +52,7 @@ function App() {
                     <Route exact path={"/post-information"}>
                         {isAuth ? <PostInformationPage/> : <Redirect to="/"/>}
                     </Route>
+
                 </Switch>
             </div>
         </>

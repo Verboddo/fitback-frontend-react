@@ -41,7 +41,7 @@ function FileUpload() {
     return (
         <div className={styles["file-upload-container"]}>
 
-            <Dropzone onDrop={onDrop} multiple={false}>
+            <Dropzone accept="video/mp4" onDrop={onDrop} multiple={false}>
                 {({getRootProps, getInputProps}) => (
                     <section>
                         <div className={styles["dropzone"]} {...getRootProps()}>
@@ -54,8 +54,10 @@ function FileUpload() {
                                     {selectedFiles && selectedFiles[0].name}
                                 </div>
                             ) : (
-                                <p className={styles["file-upload-text"]}>Drag and drop file here, or click to upload
-                                    file</p>
+                                <div className={styles["file-upload-text"]}>Drag and drop file here, or click to upload file
+                                    <p className={styles["file-upload-small-text"]}>(Only *.mp4 videos will be accepted, and a maximum 150 000 kilobytes)</p>
+                                </div>
+
                             )}
                         </div>
                         <aside className={styles["selected-file-wrapper"]}>

@@ -1,7 +1,7 @@
 import {useHistory} from "react-router-dom";
 
 //Create button component
-function Button({ children, buttonType, location, className}) {
+function Button({ children, buttonType, location, className, disabled}) {
 
     // Import the useHistory
     const history = useHistory()
@@ -14,6 +14,8 @@ function Button({ children, buttonType, location, className}) {
             type={buttonType}
             //Create the on click with adjustable history location
             onClick={() => history.push(location)}
+
+            disabled={disabled}
         >
             {/*Make adjustable text for button*/}
             {children}

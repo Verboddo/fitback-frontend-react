@@ -19,7 +19,8 @@ function UpdateInformation({
                                minLengthMessage,
                                maxLengthMessage,
                                minMessage,
-                               maxMessage
+                               maxMessage,
+                               required,
                            }) {
     return (
         <label
@@ -30,27 +31,29 @@ function UpdateInformation({
                 type={type}
                 placeholder={placeholder}
                 {...register(registerName, {
-                    pattern: {
-                        value: pattern,
-                        message: patternMessage
+                        required: required,
+                        pattern: {
+                            value: pattern,
+                            message: patternMessage
+                        },
+                        minLength: {
+                            value: minLength,
+                            message: minLengthMessage
+                        },
+                        maxLength: {
+                            value: maxLength,
+                            message: maxLengthMessage
+                        },
+                        min: {
+                            value: min,
+                            message: minMessage
+                        },
+                        max: {
+                            value: max,
+                            message: maxMessage
+                        },
                     },
-                    minLength: {
-                        value: minLength,
-                        message: minLengthMessage
-                    },
-                    maxLength: {
-                        value: maxLength,
-                        message: maxLengthMessage
-                    },
-                    min: {
-                        value: min,
-                        message: minMessage
-                    },
-                    max: {
-                        value: max,
-                        message: maxMessage
-                    },
-                })}
+                )}
                 value={value}
                 onChange={onChange}
             />

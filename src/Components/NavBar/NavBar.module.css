@@ -1,11 +1,23 @@
-nav {
+.navbar-container {
     background-color: black;
     color: white;
+    z-index: 100;
+    position: sticky;
+    top: 0;
     display: flex;
-    padding: 0 32px;
+    justify-content: center;
+}
+
+nav {
+    width: 1024px;
+    display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+}
+
+nav:before {
+    width: 1024px;
 }
 
 .logo-container {
@@ -41,7 +53,6 @@ nav a:active {
 .banner-container {
     display: flex;
     flex-direction: column;
-    margin: 20px;
     width: 1024px;
     margin: auto;
 }

@@ -1,17 +1,21 @@
 import loginRegisterImage from "../../assets/login-register-image.jpg"
 import Button from "../../Components/Button";
 import styles from "../SignUp/SignUp.module.css"
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {AuthContext} from "../../context/AuthContext";
 import {useForm} from "react-hook-form";
 import axios from "axios";
+import InputComponent from "../../Components/InputComponent";
 
 function Login() {
     const { loggedIn } =useContext(AuthContext)
 
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, formState: {errors, isDirty, isValid} } = useForm({mode: 'onChange'})
+
+    const [error, setError] = useState(false)
 
     async function onFormSubmit(data) {
+        setError(false)
         try{
             const result = await axios.post("http://localhost:8080/api/auth/signin", {
                 username: data.username,
@@ -19,6 +23,7 @@ function Login() {
             })
             loggedIn(result.data.accessToken)
         } catch (e) {
+            setError(true)
             console.error(e)
         }
     }
@@ -39,24 +44,40 @@ function Login() {
                     className={styles["signup-form"]}
                     onSubmit={handleSubmit(onFormSubmit)}>
                     <label htmlFor="login">
-                        <input
-                            type="text"
-                            placeholder="username"
-                            id="username"
-                            {...register("username")}
+                        <InputComponent
+                        type="text"
+                        placeholder="username"
+                        id="username"
+                        register={register}
+                        registerName="username"
+                        errors={errors}
+                        required="This field may not be empty"
+                        minLength={3}
+                        minLengthMessage="It has to be a minimum of 3 characters"
+                        maxLength={20}
+                        maxLengthMessage="It can me a maximum of 20 characters"
                         />
-                        <input
+                        <InputComponent
                             type="password"
                             placeholder="password"
                             id="password"
-                            {...register("password")}
+                            register={register}
+                            registerName="password"
+                            errors={errors}
+                            required="This field may not be empty"
+                            minLength={3}
+                            minLengthMessage="It has to be a minimum of 3 characters"
+                            maxLength={20}
+                            maxLengthMessage="It can me a maximum of 20 characters"
                         />
                         <Button
                             className={styles["register-button"]}
                             buttonType="submit"
+                            disabled={!isDirty || !isValid}
                         >
                             Log in
                         </Button>
+                        {error && <p className="error">Username and password don't match</p>}
                     </label>
                 </form>
             </div>

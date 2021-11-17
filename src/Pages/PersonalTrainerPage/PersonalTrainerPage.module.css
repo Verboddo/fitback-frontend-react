@@ -1,3 +1,15 @@
+.personal-trainer-page-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.personal-trainer-video-container {
+    display: inline-block;
+    flex-direction: column;
+    justify-content: right;
+    text-align: right;
+}
+
 .personal-trainer-select-box-container {
     margin: 20px 20px 20px 0;
     border: 3px solid #6D696A;
@@ -28,4 +40,12 @@
     border-radius: 10px;
     font-size: 12px;
     width: 200px;
+}
+
+.feedback-text {
+    width: 1024px;
+    padding: 0 8px;
+    border: 2px solid #6D696A;
+    border-radius: 5px;
+    word-break: break-word;
 }

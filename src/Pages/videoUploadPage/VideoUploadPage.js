@@ -1,6 +1,6 @@
 import FileUpload from "../../Components/fileUpload/FileUpload";
 
-function UserExercisePage() {
+function VideoUploadPage() {
     return (
         <>
             <FileUpload/>
@@ -8,4 +8,4 @@ function UserExercisePage() {
     )
 }
 
-export default UserExercisePage
+export default VideoUploadPage
