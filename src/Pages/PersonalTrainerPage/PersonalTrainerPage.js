@@ -5,14 +5,18 @@ import UserInformation from "../../Components/UserInformation/UserInformation";
 import PlayVideo from "../../Components/PlayVideo";
 import styles from "./PersonalTrainerPage.module.css"
 import Button from "../../Components/Button";
-import DeleteUser from "../../Components/DeleteUser";
+import DeleteUserButton from "../../Components/DeleteUserButton";
+import DeleteFileButton from "../../Components/DeleteFileButton";
+import LoadingSpinner from "../../Components/LoadingSpinner/LoadingSpinner";
 
 function PersonalTrainerPage() {
 
     const {handleSubmit, register} = useForm()
 
-    const [error, toggleError] = useState(false);
-    const [loading, toggleLoading] = useState(false);
+    const [error, toggleError] = useState(false)
+    const [loading, toggleLoading] = useState(false)
+    const [fileLoading, toggleFileLoading] = useState(false)
+    const [feedbackLoading, toggleFeedbackLoading] = useState(false)
 
     // put all users in select box so personal trainer can choose user
     const [selectBoxUserChoice, setSelectBoxUserChoice] = useState({})
@@ -39,9 +43,12 @@ function PersonalTrainerPage() {
     const [feedbackText, setFeedbackText] = useState("")
     const [submitSuccess, setSubmitSucces] = useState("")
 
+    const [changeData, setChangeData] = useState(false)
+
     const token = localStorage.getItem("token")
 
     function onFormSubmit(data) {
+        console.log(data)
     }
 
     // get user on username and file data for file download
@@ -104,7 +111,8 @@ function PersonalTrainerPage() {
                 setSelectBoxUserChoice({
                     user: {
                         username: allUsers,
-                    }})
+                    }
+                })
                 setAllUserData(result.data)
             } catch (e) {
                 console.log(e)
@@ -115,22 +123,24 @@ function PersonalTrainerPage() {
     }
 
     useEffect(() => {
+        async function getFileData() {
+            toggleFileLoading(true)
+            try {
+                const result = await axios("http://localhost:8080/api/file/files", {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                setFileInfoForDownload(result.data)
+            } catch (e) {
+                console.error(e)
+            }
+            toggleFileLoading(false)
+        }
+
         getFileData()
     }, [])
-
-    async function getFileData() {
-        try {
-            const result = await axios("http://localhost:8080/api/file/files", {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            setFileInfoForDownload(result.data)
-        } catch (e) {
-            console.error(e)
-        }
-    }
 
     // get data to download file
     async function downloadFile() {
@@ -167,21 +177,18 @@ function PersonalTrainerPage() {
                         Authorization: `Bearer ${token}`
                     }
                 })
-                if (fileIdAndName) {
-                    setFeedbackText(result.data[0].feedback)
-                }
-                if (currentFileInfo) {
-                    setFeedbackId(result.data[0].id)
-                }
+                setFeedbackText(result.data[0].feedback)
+                setFeedbackId(result.data[0].id)
             } catch (e) {
-                console.error(e)
+                console.error("There is no feedback with the file")
             }
         }
 
         getFeedbackData()
-    }, [currentFileInfo])
+    }, [currentFileInfo, changeData])
 
     async function onFeedbackSubmit(data) {
+        toggleFeedbackLoading(true)
         const fileIdAndName = currentFileInfo.split(" ")
         try {
             const result = await axios.post("http://localhost:8080/api/feedback", {
@@ -194,15 +201,18 @@ function PersonalTrainerPage() {
                 }
             })
             if (result.status === 201) {
+                setChangeData(true)
                 setFeedbackText("")
                 setSubmitSucces("Feedback uploaded successfully!")
             }
         } catch (e) {
             console.error(e)
         }
+        toggleFeedbackLoading(false)
     }
 
     async function onFeedbackUpdateSubmit(data) {
+        toggleFeedbackLoading(true)
         try {
             const result = await axios.put(`http://localhost:8080/api/feedback/${feedbackId}`, {
                     feedback: data.feedback
@@ -215,6 +225,7 @@ function PersonalTrainerPage() {
                 })
             if (result.status === 200) {
                 console.log("gelukt")
+                setChangeData(true)
                 setFeedbackText("")
                 setSubmitSucces("Feedback updated successfully!")
             }
@@ -222,6 +233,7 @@ function PersonalTrainerPage() {
         } catch (e) {
             console.error(e)
         }
+        toggleFeedbackLoading(false)
     }
 
     // get selected user id to delete user by id
@@ -236,6 +248,8 @@ function PersonalTrainerPage() {
             }
         }
     }, [selectedUser])
+
+    console.log(feedbackLoading)
 
     return (
         <div className={styles["personal-trainer-page-container"]}>
@@ -279,50 +293,63 @@ function PersonalTrainerPage() {
                 />
                 }
 
-                <DeleteUser
+                <DeleteUserButton
                     selectedUserId={userId}
                     token={token}
                     className={styles["personal-trainer-button"]}
                 />
             </div>
 
-            <div className={styles["personal-trainer-video-container"]}>
-                {fileInfoForDownload.length > 0 &&
-                <form
-                    className={styles["personal-trainer-select-box-container"]}
-                    onSubmit={handleSubmit(onFormSubmit)}>
-                    <select
-                        className={styles["personal-trainer-select-box"]}
-                        onChange={e => setCurrentFileInfo(e.target.value)}>
-                        <option selected disabled>Kies een video</option>
-                        {fileInfoMapped.map(fileId => {
-                            return <option
-                                key={fileId.id}
-                                value={fileId.id.name}
-                            >
-                                {fileId.id} {fileId.name} {fileId.username}
-                            </option>
-                        })}
-                        ></select>
-                </form>
-                }
+            {!fileLoading ?
+                <div className={styles["personal-trainer-video-container"]}>
 
-                {currentFileInfo.length > 0 &&
-                <PlayVideo
-                    key={currentFileInfo.split(" ")[0]}
-                    fileId={currentFileInfo.split(" ")[0]}
-                />
-                }
+                    {fileInfoForDownload.length > 0 &&
+                    <form
+                        className={styles["personal-trainer-select-box-container"]}
+                        onSubmit={handleSubmit(onFormSubmit)}>
+                        <select
+                            className={styles["personal-trainer-select-box"]}
+                            onChange={e => setCurrentFileInfo(e.target.value)}>
+                            <option selected disabled>Kies een video</option>
+                            {fileInfoMapped.map(fileId => {
+                                return <option
+                                    key={fileId.id}
+                                    value={fileId.id.name}
+                                >
+                                    {fileId.id} {fileId.name} {fileId.username}
+                                </option>
+                            })}
+                            ></select>
+                    </form>
+                    }
 
-                {currentFileInfo.length > 0 &&
-                <p>Indien de video niet laadt kunt u de video downloaden door middel van het download knop hieronder</p>
-                }
-                {currentFileInfo.length > 0 &&
-                <button
-                    className={styles["personal-trainer-button"]}
-                    onClick={() => downloadFile()}>Download</button>
-                }
-            </div>
+                    {currentFileInfo.length > 0 &&
+                    <PlayVideo
+                        key={currentFileInfo.split(" ")[0]}
+                        fileId={currentFileInfo.split(" ")[0]}
+                    />
+                    }
+
+                    {currentFileInfo.length > 0 &&
+                    <p>Indien de video niet laadt kunt u de video downloaden door middel van het download knop
+                        hieronder</p>
+                    }
+
+                    {currentFileInfo.length > 0 &&
+                    <DeleteFileButton
+                        className={styles["personal-trainer-delete-button"]}
+                        currentFileInfo={currentFileInfo}
+                        token={token}
+                    />}
+
+                    {currentFileInfo.length > 0 &&
+                    <button
+                        className={styles["personal-trainer-button"]}
+                        onClick={() => downloadFile()}>Download</button>
+                    }
+                </div> : <LoadingSpinner
+                    className={styles["personal-trainer-loading-spinner"]}
+                />}
 
             {feedbackText && currentFileInfo.length > 0 &&
             <section className={styles["feedback-text"]}>
@@ -349,11 +376,18 @@ function PersonalTrainerPage() {
                             )}
                         />
                         <p>{submitSuccess}</p>
-                        <Button
-                            buttonType="submit"
-                        >
-                            Upload feedback
-                        </Button>
+                        <div className={styles["button-container"]}>
+
+                            {!feedbackLoading ?
+                            <Button
+                                className={styles["personal-trainer-button"]}
+                                buttonType="submit"
+                            >
+                                Upload feedback
+                            </Button> : <LoadingSpinner
+                                    className={styles["feedback-loading-spinner"]}
+                                />}
+                        </div>
                     </label>
                 </form>
             </div>
@@ -373,17 +407,23 @@ function PersonalTrainerPage() {
                             onChange={event => setFeedbackText(event.target.value)}
                             {...register("feedback", {
                                 minLength: 10,
-                                maxLength: 300,
+                                maxLength: 1024,
                             })}
-                            defaultValue={feedbackText}
+                            value={feedbackText}
                         />
                         <p>{submitSuccess}</p>
-                        <Button
-                            className={styles["personal-trainer-button"]}
-                            buttonType="submit"
-                        >
-                            Update feedback
-                        </Button>
+                        <div className={styles["button-container"]}>
+
+                            {!feedbackLoading ?
+                                <Button
+                                    className={styles["personal-trainer-button"]}
+                                    buttonType="submit"
+                                >
+                                    Update feedback
+                                </Button> : <LoadingSpinner
+                                className={styles["feedback-loading-spinner"]}
+                                />}
+                        </div>
                     </label>
                 </form>
             </div>

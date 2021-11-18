@@ -42,10 +42,44 @@
     width: 200px;
 }
 
+.personal-trainer-delete-button {
+    background-color: #00ADEF;
+    margin: 10px 295px 20px 0;
+    border-radius: 10px;
+    font-size: 12px;
+    width: 200px;
+}
+
 .feedback-text {
     width: 1024px;
     padding: 0 8px;
     border: 2px solid #6D696A;
     border-radius: 5px;
     word-break: break-word;
+    margin-top: 40px;
+}
+
+.feedback-container textarea {
+    width: 1024px;
+}
+
+.button-container {
+    text-align: end;
+}
+
+.personal-trainer-loading-spinner {
+    display: flex;
+    width: 650px;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+}
+
+.feedback-loading-spinner {
+    display: flex;
+    width: 1024px;
+    height: 50px;
+    align-items: center;
+    justify-content: end;
+    margin: 20px 0;
 }

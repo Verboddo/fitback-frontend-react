@@ -5,7 +5,6 @@ import UserInformation from "../../Components/UserInformation/UserInformation";
 import {AuthContext} from "../../context/AuthContext";
 import styles from "./UserPage.module.css"
 import axios from "axios";
-import Button from "../../Components/Button";
 
 function UserPage() {
     const {userProfile, loading} = useContext(UserProfileContext)
