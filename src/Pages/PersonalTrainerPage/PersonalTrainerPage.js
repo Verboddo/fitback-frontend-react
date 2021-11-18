@@ -5,6 +5,7 @@ import UserInformation from "../../Components/UserInformation/UserInformation";
 import PlayVideo from "../../Components/PlayVideo";
 import styles from "./PersonalTrainerPage.module.css"
 import Button from "../../Components/Button";
+import DeleteUser from "../../Components/DeleteUser";
 
 function PersonalTrainerPage() {
 
@@ -14,7 +15,7 @@ function PersonalTrainerPage() {
     const [loading, toggleLoading] = useState(false);
 
     // put all users in select box so personal trainer can choose user
-    const [selectBoxUserChoice, setSelectBoxUserChoice] = useState([])
+    const [selectBoxUserChoice, setSelectBoxUserChoice] = useState({})
     // put the selected username in useState so we can load user information
     const [selectedUser, setSelectedUser] = useState([])
     // put user information in state so we can load in page
@@ -30,6 +31,9 @@ function PersonalTrainerPage() {
     // chosen file by personal trainer to display video or download video
     const [currentFileInfo, setCurrentFileInfo] = useState([])
 
+    const [allUserData, setAllUserData] = useState()
+    const [userId, setUserId] = useState()
+
     const [feedbackId, setFeedbackId] = useState("")
 
     const [feedbackText, setFeedbackText] = useState("")
@@ -43,7 +47,7 @@ function PersonalTrainerPage() {
     // get user on username and file data for file download
     useEffect(() => {
         getUserData()
-    }, [selectedUser])
+    }, [selectedUser, allUserData])
 
     async function getUserData() {
         toggleError(false)
@@ -97,7 +101,11 @@ function PersonalTrainerPage() {
                 // mapping over all users and returning only the usernames
                 const allUsers = result.data.map(user => user.username)
                 // set all usernames to useState
-                setSelectBoxUserChoice(allUsers)
+                setSelectBoxUserChoice({
+                    user: {
+                        username: allUsers,
+                    }})
+                setAllUserData(result.data)
             } catch (e) {
                 console.log(e)
                 toggleError(true)
@@ -216,7 +224,18 @@ function PersonalTrainerPage() {
         }
     }
 
-    console.log(feedbackText)
+    // get selected user id to delete user by id
+    useEffect(() => {
+        if (allUserData) {
+            for (let i = 0; i < allUserData.length; i++) {
+                console.log(allUserData[i].username)
+                if (allUserData[i].username === selectedUser) {
+                    setUserId(allUserData[i].id)
+                    break
+                }
+            }
+        }
+    }, [selectedUser])
 
     return (
         <div className={styles["personal-trainer-page-container"]}>
@@ -233,7 +252,7 @@ function PersonalTrainerPage() {
                         className={styles["personal-trainer-select-box"]}
                         onChange={e => setSelectedUser(e.target.value)}>
                         <option selected disabled>Kies een gebruiker</option>
-                        {selectBoxUserChoice.map(user => {
+                        {selectBoxUserChoice.user?.username.map(user => {
                             return <option
                                 key={user}
                                 value={user}
@@ -259,44 +278,50 @@ function PersonalTrainerPage() {
                     userWeight={currentUserData.currentUserData.weight}
                 />
                 }
+
+                <DeleteUser
+                    selectedUserId={userId}
+                    token={token}
+                    className={styles["personal-trainer-button"]}
+                />
             </div>
 
             <div className={styles["personal-trainer-video-container"]}>
-            {fileInfoForDownload.length > 0 &&
-            <form
-                className={styles["personal-trainer-select-box-container"]}
-                onSubmit={handleSubmit(onFormSubmit)}>
-                <select
-                    className={styles["personal-trainer-select-box"]}
-                    onChange={e => setCurrentFileInfo(e.target.value)}>
-                    <option selected disabled>Kies een video</option>
-                    {fileInfoMapped.map(fileId => {
-                        return <option
-                            key={fileId.id}
-                            value={fileId.id.name}
-                        >
-                            {fileId.id} {fileId.name} {fileId.username}
-                        </option>
-                    })}
-                    ></select>
-            </form>
-            }
+                {fileInfoForDownload.length > 0 &&
+                <form
+                    className={styles["personal-trainer-select-box-container"]}
+                    onSubmit={handleSubmit(onFormSubmit)}>
+                    <select
+                        className={styles["personal-trainer-select-box"]}
+                        onChange={e => setCurrentFileInfo(e.target.value)}>
+                        <option selected disabled>Kies een video</option>
+                        {fileInfoMapped.map(fileId => {
+                            return <option
+                                key={fileId.id}
+                                value={fileId.id.name}
+                            >
+                                {fileId.id} {fileId.name} {fileId.username}
+                            </option>
+                        })}
+                        ></select>
+                </form>
+                }
 
-            {currentFileInfo.length > 0 &&
-            <PlayVideo
-                key={currentFileInfo.split(" ")[0]}
-                fileId={currentFileInfo.split(" ")[0]}
-            />
-            }
+                {currentFileInfo.length > 0 &&
+                <PlayVideo
+                    key={currentFileInfo.split(" ")[0]}
+                    fileId={currentFileInfo.split(" ")[0]}
+                />
+                }
 
-            {currentFileInfo.length > 0 &&
-            <p>Indien de video niet laadt kunt u de video downloaden door middel van het download knop hieronder</p>
-            }
-            {currentFileInfo.length > 0 &&
-            <button
-                className={styles["personal-trainer-button"]}
-                onClick={() => downloadFile()}>Download</button>
-            }
+                {currentFileInfo.length > 0 &&
+                <p>Indien de video niet laadt kunt u de video downloaden door middel van het download knop hieronder</p>
+                }
+                {currentFileInfo.length > 0 &&
+                <button
+                    className={styles["personal-trainer-button"]}
+                    onClick={() => downloadFile()}>Download</button>
+                }
             </div>
 
             {feedbackText && currentFileInfo.length > 0 &&
