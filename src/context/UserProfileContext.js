@@ -29,6 +29,7 @@ function UserProfileContextProvider({children}) {
                     })
                     setUserProfileData({
                         userProfile: {
+                            id: result.data?.id,
                             firstName: result.data?.firstName,
                             lastName: result.data?.lastName,
                             address: result.data?.address,

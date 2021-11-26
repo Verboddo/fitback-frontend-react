@@ -4,14 +4,16 @@ import {useEffect, useState} from "react";
 
 function PlayVideo( { fileId }) {
     const [urlLink, setUrlLink] = useState(null)
+    const [isMounted, setIsMounted] = useState(false)
 
     useEffect(() => {
+        setIsMounted(true)
         const token = localStorage.getItem("token")
 
         async function getVideo() {
             setUrlLink({video: false})
             try {
-                const result = await axios(`http://localhost:8080/api/file/${fileId}`, {
+                await axios(`http://localhost:8080/api/file/${fileId}`, {
                     responseType: 'arraybuffer',
                     headers: {
                         "Content-Type": "application/json",
@@ -26,8 +28,8 @@ function PlayVideo( { fileId }) {
                 console.log(e)
             }
         }
-
         getVideo()
+        return () => { setIsMounted(false)}
     }, [])
 
 

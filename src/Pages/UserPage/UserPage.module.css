@@ -15,9 +15,8 @@
 
 .feedback-container {
     display: block;
-    background-color: #6D696A;
     width: 1024px;
-    border-style: solid;
+    border: 3px solid #6D696A;
     padding-right: 43px;
     margin: 20px 0;
     border-radius: 10px;
@@ -32,11 +31,13 @@
     display: flex;
     flex-direction: column;
     width: 1024px;
-    border-style: solid;
+    border: 2px solid #6D696A;
     margin: 8px 0 0 -27px;
-    background-color: gray;
     word-break: break-word;
     padding: 8px;
     border-radius: 5px;
 }
 
+.feedback-paragraph {
+    margin-left: 15px;
+}

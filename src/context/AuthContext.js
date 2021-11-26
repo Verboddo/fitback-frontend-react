@@ -1,7 +1,8 @@
-import {createContext, useContext, useEffect, useState} from "react";
+import {createContext, useEffect, useState} from "react";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import {useHistory} from "react-router-dom";
+import LoadingSpinner from "../Components/LoadingSpinner/LoadingSpinner";
 
 // Creating context
 export const AuthContext = createContext({})
@@ -19,6 +20,7 @@ function AuthContextProvider({children}) {
     const [isAdmin, setIsAdmin] = useState(false)
 
     const history = useHistory()
+
 
     useEffect(() => {
 
@@ -66,7 +68,9 @@ function AuthContextProvider({children}) {
                 isAuth: false,
                 user: null,
                 status: 'done'
-            })
+            }
+
+            )
         }
     }, [])
 
@@ -116,7 +120,6 @@ function AuthContextProvider({children}) {
         history.push("/")
     }
 
-
     const contextData = {
         ...isAuth,
         loggedIn,
@@ -126,8 +129,9 @@ function AuthContextProvider({children}) {
 
     return (
         <AuthContext.Provider value={contextData}>
-            {isAuth.status === 'done' ? children : <p>Loading...</p>}
+            {isAuth.status === 'done' ? children : <LoadingSpinner/>}
         </AuthContext.Provider>)
 }
 
 export default AuthContextProvider
+

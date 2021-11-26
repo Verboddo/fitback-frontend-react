@@ -5,16 +5,21 @@ import UserInformation from "../../Components/UserInformation/UserInformation";
 import {AuthContext} from "../../context/AuthContext";
 import styles from "./UserPage.module.css"
 import axios from "axios";
+import LoadingSpinner from "../../Components/LoadingSpinner/LoadingSpinner";
 
 function UserPage() {
     const {userProfile, loading} = useContext(UserProfileContext)
     const {user} = useContext(AuthContext)
 
     const [userFileData, setUserFileData] = useState([])
+    const [feedbackLoading, toggleFeedbackLoading] = useState(false)
+    const [isMounted, setIsMounted] = useState(false)
 
     const token = localStorage.getItem("token")
 
     useEffect(() => {
+        setIsMounted(true)
+        toggleFeedbackLoading(false)
         async function fetchFileData() {
             try {
                 const result = await axios("http://localhost:8080/api/file/files", {
@@ -43,10 +48,12 @@ function UserPage() {
             } catch (e) {
                 console.error(e)
             }
+            toggleFeedbackLoading(true)
         }
         if (token) {
             fetchFileData()
         }
+        return () => { setIsMounted(false)}
     }, [])
 
     const history = useHistory()
@@ -87,27 +94,30 @@ function UserPage() {
                 </button>
                 }
 
-                <p>If you would like to upload a  <Link to="/video-upload">video</Link> for the personal trainer to review.</p>
+                <p>If you would like to upload a <Link to="/video-upload">video</Link> for the personal trainer to
+                    review.</p>
             </div>
 
-            {userFileData.length > 0 &&
-            <div className={styles["feedback-container"]}>
-                <h2>Uploaded video's and feedback</h2>
-                <ul>{userFileData.map(filename =>
-                    <li
-                        className={styles["filename-list"]}
-                        key={filename.id}>Video name: {filename.name}
-                        {filename.feedback[0] &&
-                        <p
-                            className={styles["feedback"]}
-                        >
-                            Feedback: {filename.feedback[0].feedback}</p>
-                        }
-                    </li>
-                )}
-                </ul>
-            </div>
-            }
+            {feedbackLoading && userFileData.length >= 0 ?
+                <div className={styles["feedback-container"]}>
+                    <h2>Uploaded video's and feedback</h2>
+                    {userFileData.length === 0 &&
+                    <p className={styles["feedback-paragraph"]}>No uploaded videos or feedback received yet, upload a <Link to="/video-upload">video</Link> here</p>
+                    }
+                    <ul>{userFileData.map(filename =>
+                        <li
+                            className={styles["filename-list"]}
+                            key={filename.id}>Video name: {filename.name}
+                            {filename.feedback[0] &&
+                            <p
+                                className={styles["feedback"]}
+                            >
+                                Feedback: {filename.feedback[0].feedback}</p>
+                            }
+                        </li>
+                    )}
+                    </ul>
+                </div> : <LoadingSpinner/>}
         </div>
     )
 }

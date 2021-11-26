@@ -6,7 +6,7 @@ import styles from "./InformationPages.module.css"
 import UpdateInformation from "../../Components/UpdateInformation/UpdateInformation";
 
 function UpdateInformationPage() {
-    const { register, handleSubmit, formState: {errors, isDirty, isValid} } = useForm({mode: 'onChange'})
+    const { register, handleSubmit, formState: {errors, isDirty, isValid} } = useForm({mode: 'onBlur'})
 
     const history = useHistory()
 
@@ -49,7 +49,7 @@ function UpdateInformationPage() {
                         register={register}
                         registerName="firstName"
                         errors={errors}
-                        required={true}
+                        required="This field cannot be empty"
                         pattern={/^[a-zA-Z]*$/}
                         patternMessage="Name may only exist out of letters"
                         minLengthMessage="Name is to short"
@@ -67,7 +67,7 @@ function UpdateInformationPage() {
                         registerName="lastName"
                         minLengthMessage="Name is too short"
                         errors={errors}
-                        required={true}
+                        required="This field cannot be empty"
                         pattern={/^[a-zA-Z]*$/}
                         patternMessage="Name may only exist out of letters"
                         minLength={3}
@@ -82,7 +82,7 @@ function UpdateInformationPage() {
                         id="address"
                         register={register}
                         errors={errors}
-                        required={true}
+                        required="This field cannot be empty"
                         registerName="address"
                         minLength={5}
                         minLengthMessage="Address name is too short"
@@ -98,7 +98,7 @@ function UpdateInformationPage() {
                         id="zipcode"
                         register={register}
                         errors={errors}
-                        required={true}
+                        required="This field cannot be empty"
                         registerName="zipcode"
                         minLength={6}
                         minLengthMessage="Zipcode is too short"
@@ -116,7 +116,7 @@ function UpdateInformationPage() {
                         id="country"
                         register={register}
                         errors={errors}
-                        required={true}
+                        required="This field cannot be empty"
                         registerName="country"
                         pattern={/^[a-zA-Z]*$/}
                         patternMessage="Country name may only exist out of letters"
@@ -134,7 +134,7 @@ function UpdateInformationPage() {
                         id="age"
                         register={register}
                         errors={errors}
-                        required={true}
+                        required="This field cannot be empty"
                         registerName="age"
                         min={12}
                         minMessage="Number is too low"
@@ -152,7 +152,7 @@ function UpdateInformationPage() {
                         id="height"
                         register={register}
                         errors={errors}
-                        required={true}
+                        required="This field cannot be empty"
                         registerName="height"
                         min={100}
                         minMessage="Number is too low"
@@ -170,7 +170,7 @@ function UpdateInformationPage() {
                         id="weight"
                         register={register}
                         errors={errors}
-                        required={true}
+                        required="This field cannot be empty"
                         registerName="weight"
                         min={40}
                         minMessage="Number is too low"

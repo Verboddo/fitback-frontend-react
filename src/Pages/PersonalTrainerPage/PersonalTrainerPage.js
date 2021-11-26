@@ -5,18 +5,20 @@ import UserInformation from "../../Components/UserInformation/UserInformation";
 import PlayVideo from "../../Components/PlayVideo";
 import styles from "./PersonalTrainerPage.module.css"
 import Button from "../../Components/Button";
-import DeleteUserButton from "../../Components/DeleteUserButton";
+import DeleteUserButton from "../../Components/deleteUserButton/DeleteUserButton";
 import DeleteFileButton from "../../Components/DeleteFileButton";
 import LoadingSpinner from "../../Components/LoadingSpinner/LoadingSpinner";
+import TextAreaComponent from "../../Components/TextAreaComponent";
 
 function PersonalTrainerPage() {
 
-    const {handleSubmit, register} = useForm()
+    const {register, handleSubmit, formState: {errors, isDirty, isValid}} = useForm({mode: 'onChange'})
 
     const [error, toggleError] = useState(false)
     const [loading, toggleLoading] = useState(false)
     const [fileLoading, toggleFileLoading] = useState(false)
     const [feedbackLoading, toggleFeedbackLoading] = useState(false)
+    const [isMounted, setIsMounted] = useState(false)
 
     // put all users in select box so personal trainer can choose user
     const [selectBoxUserChoice, setSelectBoxUserChoice] = useState({})
@@ -48,81 +50,86 @@ function PersonalTrainerPage() {
     const token = localStorage.getItem("token")
 
     function onFormSubmit(data) {
-        console.log(data)
     }
 
     // get user on username and file data for file download
     useEffect(() => {
+        setIsMounted(true)
+        async function getUserData() {
+            toggleError(false)
+            toggleLoading(true)
+            if (token) {
+                try {
+                    const result = await axios(`http://localhost:8080/api/users/${selectedUser}`, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
+                    setCurrentUserData({
+                        currentUserData: {
+                            username: result.data.username,
+                            firstName: result.data.userProfile?.firstName,
+                            lastName: result.data.userProfile?.lastName,
+                            email: result.data.email,
+                            address: result.data.userProfile?.address,
+                            zipcode: result.data.userProfile?.zipcode,
+                            country: result.data.userProfile?.country,
+                            age: result.data.userProfile?.age,
+                            height: result.data.userProfile?.height,
+                            weight: result.data.userProfile?.weight
+                        }
+                    })
+                } catch (e) {
+                    console.error(e)
+                    toggleError(true)
+                }
+                toggleLoading(false)
+            }
+        }
         getUserData()
+        return () => { setIsMounted(false)}
     }, [selectedUser, allUserData])
 
-    async function getUserData() {
-        toggleError(false)
-        toggleLoading(true)
-        if (token) {
-            try {
-                const result = await axios(`http://localhost:8080/api/users/${selectedUser}`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-                setCurrentUserData({
-                    currentUserData: {
-                        username: result.data.username,
-                        firstName: result.data.userProfile?.firstName,
-                        lastName: result.data.userProfile?.lastName,
-                        email: result.data.email,
-                        address: result.data.userProfile?.address,
-                        zipcode: result.data.userProfile?.zipcode,
-                        country: result.data.userProfile?.country,
-                        age: result.data.userProfile?.age,
-                        height: result.data.userProfile?.height,
-                        weight: result.data.userProfile?.weight
-                    }
-                })
-            } catch (e) {
-                console.error(e)
-                toggleError(true)
-            }
-            toggleLoading(false)
-        }
-    }
+
 
     // get all users
     useEffect(() => {
+        async function getAllUserData() {
+            toggleError(false)
+            toggleLoading(true)
+            if (token) {
+                try {
+                    const result = await axios(`http://localhost:8080/api/users`, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
+                    // mapping over all users and returning only the usernames
+                    const allUsers = result.data.map(user => user.username)
+                    // set all usernames to useState
+                    setSelectBoxUserChoice({
+                        user: {
+                            username: allUsers,
+                        }
+                    })
+                    setAllUserData(result.data)
+                } catch (e) {
+                    console.error(e)
+                    toggleError(true)
+                }
+                toggleLoading(false)
+            }
+        }
         getAllUserData()
+        return () => { setIsMounted(false)}
     }, [])
 
-    async function getAllUserData() {
-        toggleError(false)
-        toggleLoading(true)
-        if (token) {
-            try {
-                const result = await axios(`http://localhost:8080/api/users`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-                // mapping over all users and returning only the usernames
-                const allUsers = result.data.map(user => user.username)
-                // set all usernames to useState
-                setSelectBoxUserChoice({
-                    user: {
-                        username: allUsers,
-                    }
-                })
-                setAllUserData(result.data)
-            } catch (e) {
-                console.log(e)
-                toggleError(true)
-            }
-            toggleLoading(false)
-        }
-    }
+
 
     useEffect(() => {
+        setIsMounted(true)
         async function getFileData() {
             toggleFileLoading(true)
             try {
@@ -138,8 +145,8 @@ function PersonalTrainerPage() {
             }
             toggleFileLoading(false)
         }
-
         getFileData()
+        return () => { setIsMounted(false)}
     }, [])
 
     // get data to download file
@@ -167,28 +174,33 @@ function PersonalTrainerPage() {
     useEffect(() => {
         setFeedbackText("")
         setSubmitSucces("")
+        setIsMounted(true)
 
-        async function getFeedbackData() {
-            try {
-                const fileIdAndName = currentFileInfo.split(" ")
-                const result = await axios(`http://localhost:8080/api/file/${fileIdAndName[0]}/feedback`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-                setFeedbackText(result.data[0].feedback)
-                setFeedbackId(result.data[0].id)
-            } catch (e) {
-                console.error("There is no feedback with the file")
+        if (currentFileInfo.length > 0) {
+            async function getFeedbackData() {
+                try {
+                    const fileIdAndName = currentFileInfo.split(" ")
+                    const result = await axios(`http://localhost:8080/api/file/${fileIdAndName[0]}/feedback`, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
+                    setFeedbackText(result.data[0].feedback)
+                    setFeedbackId(result.data[0].id)
+                } catch (e) {
+                    console.error("There is no feedback with the file")
+                }
             }
-        }
 
-        getFeedbackData()
+            getFeedbackData()
+        }
+        return () => { setIsMounted(false)}
     }, [currentFileInfo, changeData])
 
     async function onFeedbackSubmit(data) {
         toggleFeedbackLoading(true)
+        setChangeData(false)
         const fileIdAndName = currentFileInfo.split(" ")
         try {
             const result = await axios.post("http://localhost:8080/api/feedback", {
@@ -213,6 +225,7 @@ function PersonalTrainerPage() {
 
     async function onFeedbackUpdateSubmit(data) {
         toggleFeedbackLoading(true)
+        setChangeData(false)
         try {
             const result = await axios.put(`http://localhost:8080/api/feedback/${feedbackId}`, {
                     feedback: data.feedback
@@ -224,12 +237,10 @@ function PersonalTrainerPage() {
                     }
                 })
             if (result.status === 200) {
-                console.log("gelukt")
                 setChangeData(true)
                 setFeedbackText("")
                 setSubmitSucces("Feedback updated successfully!")
             }
-            console.log(result.status)
         } catch (e) {
             console.error(e)
         }
@@ -238,26 +249,26 @@ function PersonalTrainerPage() {
 
     // get selected user id to delete user by id
     useEffect(() => {
+        setIsMounted(true)
         if (allUserData) {
             for (let i = 0; i < allUserData.length; i++) {
-                console.log(allUserData[i].username)
                 if (allUserData[i].username === selectedUser) {
                     setUserId(allUserData[i].id)
                     break
                 }
             }
         }
+        return () => { setIsMounted(false)}
     }, [selectedUser])
-
-    console.log(feedbackLoading)
 
     return (
         <div className={styles["personal-trainer-page-container"]}>
             {loading && <span>Loading...</span>}
             {error && <span>Er is iets misgegaan met het ophalen van de data</span>}
 
+            {currentUserData.currentUserData &&
             <div>
-                {currentUserData.currentUserData &&
+                <p>Choose a user:</p>
                 <form
                     className={styles["personal-trainer-select-box-container"]}
                     onSubmit={handleSubmit(onFormSubmit)}
@@ -265,7 +276,7 @@ function PersonalTrainerPage() {
                     <select
                         className={styles["personal-trainer-select-box"]}
                         onChange={e => setSelectedUser(e.target.value)}>
-                        <option selected disabled>Kies een gebruiker</option>
+                        <option disabled>Choose a user</option>
                         {selectBoxUserChoice.user?.username.map(user => {
                             return <option
                                 key={user}
@@ -276,9 +287,7 @@ function PersonalTrainerPage() {
                         })}
                         ></select>
                 </form>
-                }
 
-                {currentUserData.currentUserData &&
                 <UserInformation
                     userName={currentUserData.currentUserData.username}
                     userFirstName={currentUserData.currentUserData.firstName}
@@ -291,7 +300,6 @@ function PersonalTrainerPage() {
                     userHeight={currentUserData.currentUserData.height}
                     userWeight={currentUserData.currentUserData.weight}
                 />
-                }
 
                 <DeleteUserButton
                     selectedUserId={userId}
@@ -299,9 +307,14 @@ function PersonalTrainerPage() {
                     className={styles["personal-trainer-button"]}
                 />
             </div>
+            }
 
             {!fileLoading ?
                 <div className={styles["personal-trainer-video-container"]}>
+
+                    {fileInfoForDownload.length > 0 &&
+                    <p className={styles["personal-trainer-video-paragraph"]}>Choose an video based on user:</p>
+                    }
 
                     {fileInfoForDownload.length > 0 &&
                     <form
@@ -310,7 +323,7 @@ function PersonalTrainerPage() {
                         <select
                             className={styles["personal-trainer-select-box"]}
                             onChange={e => setCurrentFileInfo(e.target.value)}>
-                            <option selected disabled>Kies een video</option>
+                            <option disabled>Video file name: Uploaded by user:</option>
                             {fileInfoMapped.map(fileId => {
                                 return <option
                                     key={fileId.id}
@@ -363,28 +376,32 @@ function PersonalTrainerPage() {
                 <form onSubmit={handleSubmit(onFeedbackSubmit)}>
                     <p>Please give your feedback:</p>
                     <label htmlFor="feedback">
-                        <textarea
+                        <TextAreaComponent
                             name="feedback"
-                            id=""
                             cols="105"
-                            rows="13"
+                            rows="10"
                             placeholder="Type your feedback here"
-                            {...register("feedback", {
-                                    minLength: 10,
-                                    maxLength: 1024,
-                                }
-                            )}
+                            register={register}
+                            registerName="feedback"
+                            id="feedback"
+                            required="This field may not be empty"
+                            minLength={50}
+                            minLengthMessage="It has to be a minimum of 50 characters"
+                            maxLength={1024}
+                            maxLengthMessage="It can be a maximum of 1024 characters"
+                            errors={errors}
                         />
                         <p>{submitSuccess}</p>
                         <div className={styles["button-container"]}>
 
                             {!feedbackLoading ?
-                            <Button
-                                className={styles["personal-trainer-button"]}
-                                buttonType="submit"
-                            >
-                                Upload feedback
-                            </Button> : <LoadingSpinner
+                                <Button
+                                    className={styles["personal-trainer-button"]}
+                                    buttonType="submit"
+                                    disabled={!isDirty || !isValid}
+                                >
+                                    Upload feedback
+                                </Button> : <LoadingSpinner
                                     className={styles["feedback-loading-spinner"]}
                                 />}
                         </div>
@@ -398,18 +415,20 @@ function PersonalTrainerPage() {
                 <form onSubmit={handleSubmit(onFeedbackUpdateSubmit)}>
                     <p>Please give your feedback:</p>
                     <label htmlFor="feedback">
-                        <textarea
+                        <TextAreaComponent
                             name="feedback"
-                            id=""
                             cols="105"
-                            rows="13"
+                            rows="10"
                             placeholder="Type your feedback here"
-                            onChange={event => setFeedbackText(event.target.value)}
-                            {...register("feedback", {
-                                minLength: 10,
-                                maxLength: 1024,
-                            })}
-                            value={feedbackText}
+                            register={register}
+                            registerName="feedback"
+                            id="feedback"
+                            required="This field may not be empty"
+                            minLength={50}
+                            minLengthMessage="It has to be a minimum of 50 characters"
+                            maxLength={1024}
+                            maxLengthMessage="It can be a maximum of 1024 characters"
+                            errors={errors}
                         />
                         <p>{submitSuccess}</p>
                         <div className={styles["button-container"]}>
@@ -418,10 +437,11 @@ function PersonalTrainerPage() {
                                 <Button
                                     className={styles["personal-trainer-button"]}
                                     buttonType="submit"
+                                    disabled={!isDirty || !isValid}
                                 >
                                     Update feedback
                                 </Button> : <LoadingSpinner
-                                className={styles["feedback-loading-spinner"]}
+                                    className={styles["feedback-loading-spinner"]}
                                 />}
                         </div>
                     </label>

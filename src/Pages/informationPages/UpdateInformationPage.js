@@ -6,12 +6,10 @@ import {useContext, useState} from "react";
 import {UserProfileContext} from "../../context/UserProfileContext";
 import styles from "./InformationPages.module.css"
 import UpdateInformation from "../../Components/UpdateInformation/UpdateInformation";
-import {AuthContext} from "../../context/AuthContext";
 
 function UpdateInformationPage() {
     const { register, handleSubmit, formState: {errors, isDirty, isValid} } = useForm({mode: 'onChange'})
     const { userProfile, setChangeData } = useContext(UserProfileContext)
-    const { user } = useContext(AuthContext)
 
     const [firstName, setFirstName] = useState(userProfile.firstName)
     const [lastName, setLastName] = useState(userProfile.lastName)
@@ -28,7 +26,7 @@ function UpdateInformationPage() {
         const token = localStorage.getItem("token")
 
         try {
-            await axios.put(`http://localhost:8080/api/user-profile/${user.id}`, {
+            await axios.put(`http://localhost:8080/api/user-profile/${userProfile.id}`, {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 address: data.address,

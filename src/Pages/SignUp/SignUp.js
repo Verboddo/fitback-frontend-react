@@ -59,7 +59,7 @@ function SignUp() {
                             minLength={3}
                             minLengthMessage="It has to be a minimum of 3 characters"
                             maxLength={20}
-                            maxLengthMessage="It can me a maximum of 20 characters"
+                            maxLengthMessage="It can be a maximum of 20 characters"
                         />
                         <InputComponent
                             type="email"

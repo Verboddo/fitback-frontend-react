@@ -47,7 +47,7 @@ function FileUpload() {
                         <div className={styles["dropzone"]} {...getRootProps()}>
                             <img
                                 className={styles["file-upload-logo"]}
-                                src={fileUpload} alt="file upload image"/>
+                                src={fileUpload} alt="file upload"/>
                             <input {...getInputProps()} />
                             {selectedFiles && selectedFiles[0].name ? (
                                 <div className={styles["selected-file"]}>
