@@ -11,6 +11,7 @@ import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
 import UpdateInformationPage from "./Pages/informationPages/UpdateInformationPage";
 import PostInformationPage from "./Pages/informationPages/PostInformationPage";
+import Footer from "./Components/footer/Footer";
 
 function App() {
     const { isAuth, isAdmin } = useContext(AuthContext)
@@ -52,9 +53,9 @@ function App() {
                     <Route exact path={"/post-information"}>
                         {isAuth ? <PostInformationPage/> : <Redirect to="/"/>}
                     </Route>
-
                 </Switch>
             </div>
+            <Footer/>
         </>
     );
 }

@@ -21,7 +21,6 @@ function AuthContextProvider({children}) {
 
     const history = useHistory()
 
-
     useEffect(() => {
 
         const token = localStorage.getItem("token")
@@ -51,6 +50,7 @@ function AuthContextProvider({children}) {
                             id: result.data.id,
                             email: result.data.email,
                             username: result.data.username,
+                            role: result.data.roles[0].name,
                         },
                         status: "done"
                     })

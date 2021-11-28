@@ -34,7 +34,8 @@
 }
 
 .selected-file-wrapper {
-    text-align: end;
+    display: flex;
+    justify-content: end;
 }
 
 .selected-file {
@@ -48,6 +49,10 @@
     border-radius: 5px;
     margin: 0 20px 0 0;
     font-size: 15px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+
 }
 
 .userpage-button {
@@ -64,4 +69,10 @@
     font-size: 14px;
     font-weight: lighter;
     font-style: italic;
+}
+
+.file-upload-icon {
+    font-size: 30px;
+    color: black;
+    margin-right: 8px;
 }

@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {useForm} from "react-hook-form";
 import UserInformation from "../../Components/UserInformation/UserInformation";
@@ -11,14 +11,14 @@ import LoadingSpinner from "../../Components/LoadingSpinner/LoadingSpinner";
 import TextAreaComponent from "../../Components/TextAreaComponent";
 
 function PersonalTrainerPage() {
-
-    const {register, handleSubmit, formState: {errors, isDirty, isValid}} = useForm({mode: 'onChange'})
+   const {register, handleSubmit, formState: {errors, isDirty, isValid}} = useForm({mode: 'onChange'})
 
     const [error, toggleError] = useState(false)
     const [loading, toggleLoading] = useState(false)
     const [fileLoading, toggleFileLoading] = useState(false)
     const [feedbackLoading, toggleFeedbackLoading] = useState(false)
     const [isMounted, setIsMounted] = useState(false)
+    const[ isAdmin, setIsAdmin] = useState("")
 
     // put all users in select box so personal trainer can choose user
     const [selectBoxUserChoice, setSelectBoxUserChoice] = useState({})
@@ -77,9 +77,13 @@ function PersonalTrainerPage() {
                             country: result.data.userProfile?.country,
                             age: result.data.userProfile?.age,
                             height: result.data.userProfile?.height,
-                            weight: result.data.userProfile?.weight
+                            weight: result.data.userProfile?.weight,
                         }
                     })
+                    if(selectedUser.length > 0) {
+                        setIsAdmin(result.data?.roles[0].name)
+                    }
+
                 } catch (e) {
                     console.error(e)
                     toggleError(true)
@@ -301,12 +305,15 @@ function PersonalTrainerPage() {
                     userWeight={currentUserData.currentUserData.weight}
                 />
 
+                {isAdmin !== 'ROLE_ADMIN' &&
                 <DeleteUserButton
                     selectedUserId={userId}
                     token={token}
                     className={styles["personal-trainer-button"]}
                 />
+                }
             </div>
+
             }
 
             {!fileLoading ?

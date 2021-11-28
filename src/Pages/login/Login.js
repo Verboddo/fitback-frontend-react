@@ -6,6 +6,7 @@ import {AuthContext} from "../../context/AuthContext";
 import {useForm} from "react-hook-form";
 import axios from "axios";
 import InputComponent from "../../Components/InputComponent";
+import { FaUser } from "react-icons/fa"
 
 function Login() {
     const { loggedIn } =useContext(AuthContext)
@@ -46,7 +47,7 @@ function Login() {
                     <label htmlFor="login">
                         <InputComponent
                         type="text"
-                        placeholder="username"
+                        placeholder="{<FaUser/>}username"
                         id="username"
                         register={register}
                         registerName="username"

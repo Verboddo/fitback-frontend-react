@@ -5,6 +5,7 @@ import {uploadFile} from "../../services/FileUploadService";
 import styles from "./FileUpload.module.css"
 import {useHistory} from "react-router-dom";
 import fileUpload from "../../assets/upload-logo.png"
+import { MdOutlineCloudUpload } from "react-icons/md"
 
 function FileUpload() {
     const [selectedFiles, setSelectedFiles] = useState(undefined);
@@ -54,7 +55,8 @@ function FileUpload() {
                                     {selectedFiles && selectedFiles[0].name}
                                 </div>
                             ) : (
-                                <div className={styles["file-upload-text"]}>Drag and drop file here, or click to upload file
+                                <div className={styles["file-upload-text"]}>Drag and drop file here, <br/> <MdOutlineCloudUpload className={styles["file-upload-icon"]}/>
+                                    or click to upload file
                                     <p className={styles["file-upload-small-text"]}>(Only *.mp4 videos will be accepted, and a maximum 150 000 kilobytes)</p>
                                 </div>
 
