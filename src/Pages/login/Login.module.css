@@ -1,0 +1,15 @@
+.login-button {
+    background-color: #00ADEF;
+    width: 100%;
+    margin-top: 5px;
+    border-radius: 10px;
+}
+
+.form-container {
+    min-height: 100vh; /* minimum height = screen height */
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+}

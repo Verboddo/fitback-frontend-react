@@ -1,0 +1,26 @@
+.footer-container {
+    background-color: black;
+    color: white;
+    height: 200px;
+    position: relative;
+    width: 100%;
+    bottom: 0;
+    padding: 0 0 20px;
+}
+
+.logo-container {
+    width: 150px;
+    height: 200px;
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.logo-container img {
+    width: 75px;
+    margin-right: 8px;
+}
+
+.footer-contact-information-container {
+    font-size: 16px;
+}

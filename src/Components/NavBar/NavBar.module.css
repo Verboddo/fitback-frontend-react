@@ -1,0 +1,58 @@
+.navbar-container {
+    background-color: black;
+    color: white;
+    z-index: 100;
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav {
+    width: 1024px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+nav:before {
+    width: 1024px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 150px;
+}
+
+.logo-container img {
+    width: 75px;
+    margin-right: 8px;
+}
+
+Button {
+    border-style: none;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    padding: 15px;
+}
+
+Button:hover {
+    background-color: gray;
+}
+
+nav a,
+nav a:visited,
+nav a:active {
+    color: white;
+}
+
+.banner-container {
+    display: flex;
+    flex-direction: column;
+    width: 1024px;
+    margin: auto;
+}
