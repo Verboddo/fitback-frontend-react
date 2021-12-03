@@ -4,9 +4,12 @@ import axios from "axios";
 import {useHistory} from "react-router-dom";
 import styles from "./InformationPages.module.css"
 import UpdateInformation from "../../Components/UpdateInformation/UpdateInformation";
+import {UserProfileContext} from "../../context/UserProfileContext";
+import {useContext} from "react";
 
 function UpdateInformationPage() {
     const { register, handleSubmit, formState: {errors, isDirty, isValid} } = useForm({mode: 'onBlur'})
+    const { setChangeData } = useContext(UserProfileContext)
 
     const history = useHistory()
 
@@ -32,6 +35,7 @@ function UpdateInformationPage() {
         } catch (e) {
             console.error(e)
         }
+        setChangeData(true)
     }
 
     return (
