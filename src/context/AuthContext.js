@@ -55,6 +55,7 @@ function AuthContextProvider({children}) {
                         status: "done"
                     })
                 } catch (e) {
+                    localStorage.clear()
                     console.error(e)
                 }
             }
@@ -68,9 +69,7 @@ function AuthContextProvider({children}) {
                 isAuth: false,
                 user: null,
                 status: 'done'
-            }
-
-            )
+            })
         }
     }, [])
 

@@ -47,7 +47,7 @@ function Login() {
                     <label htmlFor="login">
                         <InputComponent
                         type="text"
-                        placeholder="{<FaUser/>}username"
+                        placeholder="username"
                         id="username"
                         register={register}
                         registerName="username"
